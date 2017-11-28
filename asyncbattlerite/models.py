@@ -1,6 +1,3 @@
-import aiohttp
-
-
 class BaseBRObject:
     __slots__ = ['id']
 
@@ -80,9 +77,9 @@ class Rosters(BaseBRObject):
 
 class Match(BaseBRObject):
     __slots__ = ['created_at', 'duration', 'game_mode', 'patch', 'shard_id', 'map_id', 'type', 'telemetry_url', 'rosters',
-                 'rounds', 'spectators']
+                 'rounds', 'spectators', 'session']
 
-    def __init__(self, data):
+    def __init__(self, data, session):
         super().__init__(data)
         self.created_at = data['attributes']['createdAt']
         self.duration = data['attributes']['duration']
@@ -101,12 +98,10 @@ class Match(BaseBRObject):
         for participant in data['relationships']['spectators']['data']:
             self.spectators.append(Participant(participant))
         self.telemetry_url = data['relationships']['assets']['data'][0]['attributes']['URL']
+        self.session = session
 
-    async def get_telemetry(self, session=None):
-        if session is None:
-            session = aiohttp.ClientSession()
-
-        async with session.get(self.telemetry_url, headers={'Accept': 'application/vnd.api+json'}) as resp:
+    async def get_telemetry(self):
+        async with self.session.get(self.telemetry_url, headers={'Accept': 'application/vnd.api+json'}) as resp:
             data = await resp.json()
 
         return data
