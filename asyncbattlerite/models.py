@@ -27,7 +27,7 @@ class Team(BaseBRObject):
     def __init__(self, data):
         super().__init__(data)
         self.name = data['name']
-        self.shard_id = data['shard_id']
+        self.shard_id = data['shardId']
 
 
 class Participant(BaseBRObject):
@@ -77,28 +77,27 @@ class Round(BaseBRObject):
         self.ordinal = data['attributes']['ordinal']
         self.winning_team = data['attributes']['stats']['winningTeam']
 
-        self.participants = list()
-        for participant in data['relationships']['participants']['data']:
-            self.participants.append(Participant(participant, data['included']))
+        # self.participants = list()
+        # for participant in data['relationships']['participants']['data']:
+        #     self.participants.append(Participant(participant, included))
 
 
 class Rosters(BaseBRObject):
-    __slots__ = ['shard_id', 'score', 'side', 'won', 'participants', 'team']
+    __slots__ = ['shard_id', 'score', 'won', 'participants', 'team']
 
     def __init__(self, roster, included):
         super().__init__(roster)
         data = _get_object(included, roster['id'])
-        self.shard_id = data['attributes']['shard_id']
-        self.score = data['attributes']['score']
-        self.side = data['attributes']['side']
-        self.won = data['won']
+        self.shard_id = data['attributes']['shardId']
+        self.score = data['attributes']['stats']['score']
+        self.won = data['attributes']['won']
 
         self.participants = list()
         for participant in data['relationships']['participants']['data']:
-            self.participants.append(Participant(participant, data['included']))
+            self.participants.append(Participant(participant, included))
 
-        if 'team' in data['relationships']:
-            self.team = Team(data['relationships']['team'])
+        # if 'team' in data['relationships']:
+        #     self.team = Team(data['relationships']['team'])
 
 # class MatchTelemetry(BaseBRObject):
 #     __slots__ = ['time', 'userId']
@@ -112,6 +111,8 @@ class Match(BaseBRObject):
                  'rosters', 'rounds', 'spectators', 'session']
 
     def __init__(self, data, session):
+        included = data['included']
+        data = data['data']
         super().__init__(data)
         self.created_at = datetime.datetime.strptime(data['attributes']['createdAt'], "%Y-%m-%dT%H:%M:%SZ")
         self.duration = data['attributes']['duration']
@@ -122,20 +123,20 @@ class Match(BaseBRObject):
         self.type = data['attributes']['stats']['type']
         self.rosters = list()
         for roster in data['relationships']['rosters']['data']:
-            self.rosters.append(Rosters(roster, data['included']))
+            self.rosters.append(Rosters(roster, included))
         self.rounds = list()
         for _round in data['relationships']['rounds']['data']:
-            self.rounds.append(Round(_round, data['included']))
+            self.rounds.append(Round(_round, included))
         self.spectators = list()
         for participant in data['relationships']['spectators']['data']:
-            self.spectators.append(Participant(participant, data['included']))
-        self.telemetry_url = _get_object(data['included'],
+            self.spectators.append(Participant(participant, included))
+        self.telemetry_url = _get_object(included,
                                          data['relationships']['assets']['data'][0]['id'])['attributes']['URL']
         self.session = session
 
     async def get_telemetry(self, session=None):
         sess = session or self.session
-        async with sess.get(self.telemetry_url, headers={'Accept': 'application/vnd.api+json'}) as resp:
+        async with sess.get(self.telemetry_url, headers={'Accept': 'application/json'}) as resp:
             data = await resp.json()
 
         # After understanding the telemetry structure, to provide it as usable data is going to be a tough ordeal,

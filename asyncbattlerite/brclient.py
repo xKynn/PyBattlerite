@@ -14,26 +14,26 @@ class BRClient:
         self.base_url = "https://api.dc01.gamelockerapp.com/shards/global/"
         self.headers = {
             'Authorization': f'Bearer {key}',
-            'Accept': 'application/vnd.api+json'
+            'Accept': 'application/json'
         }
 
     async def _req(self, url):
-        with await self.session.get(url, headers=self.headers) as response:
+        async with self.session.get(url, headers=self.headers) as req:
             try:
-                resp = await response.json()
+                resp = await req.json()
             except (asyncio.TimeoutError, aiohttp.ClientResponseError):
-                raise BRRequestException(response, dict())
+                raise BRRequestException(req, dict())
 
-            if 300 > resp.status >= 200:
+            if 300 > req.status >= 200:
                 return resp
-            elif resp.status == 404:
+            elif req.status == 404:
                 raise NotFoundException
-            elif resp.status > 500:
+            elif req.status > 500:
                 raise BRServerException
             else:
-                raise BRRequestException(response, resp)
+                raise BRRequestException(req, resp)
 
     async def match_by_id(self, match_id):
         data = await self._req("{0}matches/{1}".format(self.base_url, match_id))
-        return Match(data['data'], self.session)
+        return Match(data, self.session)
 
