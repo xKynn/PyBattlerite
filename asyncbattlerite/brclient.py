@@ -35,5 +35,5 @@ class BRClient:
 
     async def match_by_id(self, match_id):
         data = await self._req("{0}matches/{1}".format(self.base_url, match_id))
-        return Match(data, self.session)
+        return Match(data['data'], self.session)
 
