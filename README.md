@@ -31,20 +31,13 @@ telemetry = loop.run_until_complete(matches[0].get_telemetry())
 ### *coroutine* `BRClient.get_matches(filters)`
 Get matches meeting the filter specifications.
 Filters:
-* **offset: int**
-Offset to page over results.
-* **limit: int**
-Number of matches to return.
-* **after: str or datetime.datetime**
-Filter to return matches after provided time period, if an str is provided it should follow the `iso8601` format.
-* **before: str or datetime.datetime**
-Filter to return matches before provided time period, if an str is provided it should follow the `iso8601` format.
-* **playernames: list of strings**
-Filter to only return matches with provided players in them by looking for their player names.
-* **playerids: list**
-Filter to only return matches with provided players in them by looking for their player IDs.
-* **teamnames: list of strings**
-Filter to only return matches where provided team names are playing
+* **offset: int** - Offset to page over results.
+* **limit: int** - Number of matches to return.
+* **after: str or datetime.datetime** - Filter to return matches after provided time period, if an str is provided it should follow the `iso8601` format.
+* **before: str or datetime.datetime** - Filter to return matches before provided time period, if an str is provided it should follow the `iso8601` format.
+* **playernames: list of strings** - Filter to only return matches with provided players in them by looking for their player names.
+* **playerids: list** - Filter to only return matches with provided players in them by looking for their player IDs.
+* **teamnames: list of strings** - Filter to only return matches where provided team names are playing
 
 ### *coroutine* `BRClient.match_by_id(match_id)`
 Return a match by its ID
