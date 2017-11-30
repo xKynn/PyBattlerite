@@ -106,3 +106,7 @@ All model classes extend this class, its only attribute is `id`
 ## A Request
 Please do not bulk scrape data from this API, Stunlock have specified that they would not like users misusing the API
 in such a way
+
+### Contact
+Demo#9465 on Discord
+[@Craft_Eternal36](https://twitter.com/Craft_Eternal36) on Twitter
