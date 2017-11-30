@@ -2,6 +2,7 @@ import datetime
 
 
 def _get_object(lst, _id):
+    """Internal function to grab data referenced inside response['included']"""
     for item in lst:
         if item['id'] == _id:
             return item
@@ -45,26 +46,28 @@ class Participant(BaseBRObject):
         self.emote = stats['emote']
         self.mount = stats['mount']
         self.outfit = stats['outfit']
-        self.side = stats['outfit']
+        self.side = stats['side']
 
-        if 'score' in stats:
-            self.ability_uses = stats['abilityUses']
-            self.damage_done = stats['damageDone']
-            self.damage_received = stats['damageReceived']
-            self.deaths = stats['deaths']
-            self.disables_done = stats['disablesDone']
-            self.disables_received = stats['disablesReceived']
-            self.energy_gained = stats['energyGained']
-            self.energy_used = stats['energyUsed']
-            self.healing_done = stats['healingDone']
-            self.healing_received = stats['healingReceived']
-            self.kills = stats['kills']
-            self.score = stats['score']
-            self.time_alive = stats['timeAlive']
-            self.user_id = stats['userID']
+        # These may or may not exist
+        self.ability_uses = stats.get('abilityUses')
+        self.damage_done = stats.get('damageDone')
+        self.damage_received = stats.get('damageReceived')
+        self.deaths = stats.get('deaths')
+        self.disables_done = stats.get('disablesDone')
+        self.disables_received = stats.get('disablesReceived')
+        self.energy_gained = stats.get('energyGained')
+        self.energy_used = stats.get('energyUsed')
+        self.healing_done = stats.get('healingDone')
+        self.healing_received = stats.get('healingReceived')
+        self.kills = stats.get('kills')
+        self.score = stats.get('score')
+        self.time_alive = stats.get('timeAlive')
+        self.user_id = stats.get('userID')
 
         if 'relationships' in data:
             self.player = Player(data['relationships']['player']['data'])
+        else:
+            self.player = None
 
 
 class Round(BaseBRObject):
@@ -92,7 +95,7 @@ class Rosters(BaseBRObject):
         self.score = data['attributes']['stats']['score']
         self.won = data['attributes']['won']
 
-        self.participants = list()
+        self.participants = []
         for participant in data['relationships']['participants']['data']:
             self.participants.append(Participant(participant, included))
 
@@ -121,13 +124,13 @@ class Match(BaseBRObject):
         self.shard_id = data['attributes']['shardId']
         self.map_id = data['attributes']['stats']['mapID']
         self.type = data['attributes']['stats']['type']
-        self.rosters = list()
+        self.rosters = []
         for roster in data['relationships']['rosters']['data']:
             self.rosters.append(Rosters(roster, included))
-        self.rounds = list()
+        self.rounds = []
         for _round in data['relationships']['rounds']['data']:
             self.rounds.append(Round(_round, included))
-        self.spectators = list()
+        self.spectators = []
         for participant in data['relationships']['spectators']['data']:
             self.spectators.append(Participant(participant, included))
         self.telemetry_url = _get_object(included,

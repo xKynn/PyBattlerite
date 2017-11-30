@@ -22,7 +22,7 @@ class BRClient:
             try:
                 resp = await req.json()
             except (asyncio.TimeoutError, aiohttp.ClientResponseError):
-                raise BRRequestException(req, dict())
+                raise BRRequestException(req, {})
 
             if 300 > req.status >= 200:
                 return resp
