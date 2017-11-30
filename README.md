@@ -31,7 +31,7 @@ telemetry = loop.run_until_complete(matches[0].get_telemetry())
 ### *coroutine* `BRClient.get_matches(filters)`
 Get matches meeting the filter specifications.
 Filters:
-* **offset: int** - Offset to page over results.
+* **offset: int** - Page number to paginate over results.
 * **limit: int** - Number of matches to return.
 * **after: str or datetime.datetime** - Filter to return matches after provided time period, if an str is provided it should follow the `iso8601` format.
 * **before: str or datetime.datetime** - Filter to return matches before provided time period, if an str is provided it should follow the `iso8601` format.
