@@ -8,10 +8,7 @@ from .errors import BRRequestException, NotFoundException, BRServerException, BR
 
 class BRClient:
     def __init__(self, key, session=None):
-        if session is None:
-            self.session = aiohttp.ClientSession()
-        else:
-            self.session = session
+        self.session = session or aiohttp.ClientSession()
         self.base_url = "https://api.dc01.gamelockerapp.com/shards/global/"
         self.headers = {
             'Authorization': f'Bearer {key}',
