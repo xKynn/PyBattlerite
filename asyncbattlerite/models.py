@@ -80,12 +80,8 @@ class Round(BaseBRObject):
         self.ordinal = data['attributes']['ordinal']
         self.winning_team = data['attributes']['stats']['winningTeam']
 
-        # self.participants = list()
-        # for participant in data['relationships']['participants']['data']:
-        #     self.participants.append(Participant(participant, included))
 
-
-class Rosters(BaseBRObject):
+class Roster(BaseBRObject):
     __slots__ = ['shard_id', 'score', 'won', 'participants', 'team']
 
     def __init__(self, roster, included):
@@ -99,23 +95,14 @@ class Rosters(BaseBRObject):
         for participant in data['relationships']['participants']['data']:
             self.participants.append(Participant(participant, included))
 
-        # if 'team' in data['relationships']:
-        #     self.team = Team(data['relationships']['team'])
-
-# class MatchTelemetry(BaseBRObject):
-#     __slots__ = ['time', 'userId']
-#
-#     def __init__(self, data):
-#         super().__init__(data)
-
 
 class Match(BaseBRObject):
     __slots__ = ['created_at', 'duration', 'game_mode', 'patch', 'shard_id', 'map_id', 'type', 'telemetry_url',
                  'rosters', 'rounds', 'spectators', 'session']
 
-    def __init__(self, data, session):
-        included = data['included']
-        data = data['data']
+    def __init__(self, data, session, included=None):
+        included = included or data['included']
+        data = data['data'] if not included else data
         super().__init__(data)
         self.created_at = datetime.datetime.strptime(data['attributes']['createdAt'], "%Y-%m-%dT%H:%M:%SZ")
         self.duration = data['attributes']['duration']
@@ -126,7 +113,7 @@ class Match(BaseBRObject):
         self.type = data['attributes']['stats']['type']
         self.rosters = []
         for roster in data['relationships']['rosters']['data']:
-            self.rosters.append(Rosters(roster, included))
+            self.rosters.append(Roster(roster, included))
         self.rounds = []
         for _round in data['relationships']['rounds']['data']:
             self.rounds.append(Round(_round, included))
