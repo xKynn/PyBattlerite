@@ -3,7 +3,7 @@
 An asynchronous python wrapper for madglory's [Battlerite API](http://battlerite-docs.readthedocs.io/en/master/introduction.html)
 
 ```
-pip install asyncbattlerite
+pip install battlerite
 ```
 
 ## Basic Usage
