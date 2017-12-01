@@ -2,7 +2,7 @@ import asyncio
 import aiohttp
 import datetime
 
-from .models import Match
+from .models import Match, MatchPaginator
 from .errors import BRRequestException, NotFoundException, BRServerException, BRFilterException
 
 
@@ -15,9 +15,10 @@ class BRClient:
             'Accept': 'application/json'
         }
 
-    async def _req(self, url, params=None):
+    async def _req(self, url, params=None, session=None):
         """General request handler"""
-        async with self.session.get(url, headers=self.headers,
+        sess = session or self.session
+        async with sess.get(url, headers=self.headers,
                                     params=params) as req:
             try:
                 resp = await req.json()
@@ -108,9 +109,9 @@ class BRClient:
         if teamnames:
             params['filter[teamNames]'] = ','.join(teamnames)
 
-        data = await self._req("{0}matches".format(self.base_url), params=params)
+        data = await self._req("{}matches".format(self.base_url), params=params)
         matches = []
         for match in data['data']:
             matches.append(Match(match, self.session, data['included']))
-        return matches
+        return MatchPaginator(matches,data['links'], self)
 

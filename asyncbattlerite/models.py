@@ -1,4 +1,8 @@
 import datetime
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+
+from .errors import BRPaginationError
 
 
 def _get_object(lst, _id):
@@ -20,6 +24,9 @@ class Player(BaseBRObject):
 
     def __init__(self, data):
         super().__init__(data)
+
+    def __repr__(self):
+        return "<Player: id={}>".format(self.id)
 
 
 class Team(BaseBRObject):
@@ -69,6 +76,10 @@ class Participant(BaseBRObject):
         else:
             self.player = None
 
+    def __repr__(self):
+        return "<Participant: id={0} shard_id={1} actor={2} bot={3}>".format(self.id, self.shard_id, self.actor,
+                                                                             True if not self.player else False)
+
 
 class Round(BaseBRObject):
     __slots__ = ['duration', 'ordinal', 'winning_team', 'participants']
@@ -79,6 +90,9 @@ class Round(BaseBRObject):
         self.duration = data['attributes']['duration']
         self.ordinal = data['attributes']['ordinal']
         self.winning_team = data['attributes']['stats']['winningTeam']
+
+    def __repr__(self):
+        return "<Round: id={} duration={} ordinal={}>".format(self.id, self.duration, self.ordinal)
 
 
 class Roster(BaseBRObject):
@@ -94,6 +108,9 @@ class Roster(BaseBRObject):
         self.participants = []
         for participant in data['relationships']['participants']['data']:
             self.participants.append(Participant(participant, included))
+
+    def __repr__(self):
+        return "<Roster: id={0} shard_id={1} won={2}>".format(self.id, self.shard_id, self.won)
 
 
 class Match(BaseBRObject):
@@ -124,6 +141,9 @@ class Match(BaseBRObject):
                                          data['relationships']['assets']['data'][0]['id'])['attributes']['URL']
         self.session = session
 
+    def __repr__(self):
+        return "<Match: id={0} shard_id={1}>".format(self.id, self.shard_id)
+
     async def get_telemetry(self, session=None):
         sess = session or self.session
         async with sess.get(self.telemetry_url, headers={'Accept': 'application/json'}) as resp:
@@ -133,3 +153,48 @@ class Match(BaseBRObject):
         # but one that can be looked into later
         return data
 
+
+class MatchPaginator:
+    __slots__ = ['matches', 'next_url', 'first_url', 'client', 'prev_url', 'offset']
+
+    def __init__(self, matches, data, client):
+        self.matches = matches
+        self.next_url = data.get('next')
+        self.first_url = data.get('first')
+        self_params = parse_qs(urlparse(data['self'])[4])
+        self.offset = self_params.get('page[offset]', 0)
+        if self.offset:
+            self.offset = self.offset[0]
+        self.prev_url = data.get('prev')
+        self.client = client
+
+    def __repr__(self):
+        return "<MatchPaginator: offset={0} next={1} prev={2}>".format(self.offset, True if self.next_url else False,
+                                                                        True if self.prev_url else False)
+
+    async def _matchmaker(self, url, sess=None):
+        data = await self.client._req("{}matches".format(url), session=sess)
+        matches = []
+        for match in data['data']:
+            matches.append(Match(match, self.client.session, data['included']))
+        print(matches)
+        self.__init__(matches, data['links'], self.client)
+        return matches
+
+    async def next(self, session=None):
+        if self.next_url:
+            matches = await self._matchmaker(self.next_url, session)
+            return matches
+        else:
+            raise BRPaginationError("This is the last page")
+
+    async def first(self, session=None):
+        matches = await self._matchmaker(self.first_url, session)
+        return matches
+
+    async def prev(self, session=None):
+        if self.prev_url:
+            matches = await self._matchmaker(self.prev_url, session)
+            return matches
+        else:
+            raise BRPaginationError("This is the first page")
