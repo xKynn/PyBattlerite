@@ -10,6 +10,7 @@ class BRClient:
     def __init__(self, key, session=None):
         self.session = session or aiohttp.ClientSession()
         self.base_url = "https://api.dc01.gamelockerapp.com/shards/global/"
+        self.status_url = "https://api.dc01.gamelockerapp.com/status"
         self.headers = {
             'Authorization': f'Bearer {key}',
             'Accept': 'application/json'
@@ -33,6 +34,11 @@ class BRClient:
                 raise BRServerException
             else:
                 raise BRRequestException(req, resp)
+
+    async def get_status(self):
+        """Check if the API is up and running"""
+        data = await self._req(self.status_url)
+        return data['attributes']['releasedAt'], data['attributes']['version']
 
     async def match_by_id(self, match_id):
         """Get a Match by its ID"""
