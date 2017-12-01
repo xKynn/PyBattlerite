@@ -44,8 +44,13 @@ Filters:
 `returns` - *MatchPaginator*
 
 ### *coroutine* `BRClient.match_by_id(match_id)`
-Return a match by its ID
+Return a match by its ID.<br />
 `returns` - *Match*
+
+### *coroutine* `BRClient.get_status()`
+Check if the API is up and running.<br />
+`returns` - *tuple(createdAt: str(), version: str())*<br />
+`raises` - *BRServerExceptioin* if the API is down.
 
 ## Classes
 ### Match
