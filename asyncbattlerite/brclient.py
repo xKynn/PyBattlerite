@@ -29,16 +29,16 @@ class BRClient:
             if 300 > req.status >= 200:
                 return resp
             elif req.status == 404:
-                raise NotFoundException
+                raise NotFoundException(req, resp)
             elif req.status > 500:
-                raise BRServerException
+                raise BRServerException(req, resp)
             else:
                 raise BRRequestException(req, resp)
 
     async def get_status(self):
         """Check if the API is up and running"""
         data = await self._req(self.status_url)
-        return data['attributes']['releasedAt'], data['attributes']['version']
+        return data['data']['attributes']['releasedAt'], data['data']['attributes']['version']
 
     async def match_by_id(self, match_id):
         """Get a Match by its ID"""
