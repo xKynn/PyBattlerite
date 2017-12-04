@@ -16,7 +16,7 @@ class BRClient:
             'Accept': 'application/json'
         }
 
-    async def _req(self, url, params=None, session=None):
+    async def gen_req(self, url, params=None, session=None):
         """General request handler"""
         sess = session or self.session
         async with sess.get(url, headers=self.headers,
@@ -37,12 +37,12 @@ class BRClient:
 
     async def get_status(self):
         """Check if the API is up and running"""
-        data = await self._req(self.status_url)
+        data = await self.gen_req(self.status_url)
         return data['data']['attributes']['releasedAt'], data['data']['attributes']['version']
 
     async def match_by_id(self, match_id):
         """Get a Match by its ID"""
-        data = await self._req("{0}matches/{1}".format(self.base_url, match_id))
+        data = await self.gen_req("{0}matches/{1}".format(self.base_url, match_id))
         return Match(data, self.session)
 
     @staticmethod
@@ -115,7 +115,7 @@ class BRClient:
         if teamnames:
             params['filter[teamNames]'] = ','.join(teamnames)
 
-        data = await self._req("{}matches".format(self.base_url), params=params)
+        data = await self.gen_req("{}matches".format(self.base_url), params=params)
         matches = []
         for match in data['data']:
             matches.append(Match(match, self.session, data['included']))

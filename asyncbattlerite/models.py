@@ -119,7 +119,7 @@ class Match(BaseBRObject):
 
     def __init__(self, data, session, included=None):
         included = included or data['included']
-        data = data['data'] if not included else data
+        data = data['data'] if included else data
         super().__init__(data)
         self.created_at = datetime.datetime.strptime(data['attributes']['createdAt'], "%Y-%m-%dT%H:%M:%SZ")
         self.duration = data['attributes']['duration']
@@ -168,12 +168,18 @@ class MatchPaginator:
         self.prev_url = data.get('prev')
         self.client = client
 
+    def __getitem__(self, item):
+        return self.matches[item]
+
+    def __iter__(self):
+        return iter(self.matches)
+
     def __repr__(self):
         return "<MatchPaginator: offset={0} next={1} prev={2}>".format(self.offset, True if self.next_url else False,
                                                                         True if self.prev_url else False)
 
     async def _matchmaker(self, url, sess=None):
-        data = await self.client._req("{}matches".format(url), session=sess)
+        data = await self.client.gen_req("{}matches".format(url), session=sess)
         matches = []
         for match in data['data']:
             matches.append(Match(match, self.client.session, data['included']))
