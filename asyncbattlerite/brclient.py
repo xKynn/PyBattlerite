@@ -23,7 +23,7 @@ class BRClient:
         self.base_url = "https://api.dc01.gamelockerapp.com/shards/global/"
         self.status_url = "https://api.dc01.gamelockerapp.com/status"
         self.headers = {
-            'Authorization': f'Bearer {key}',
+            'Authorization': 'Bearer {}'.format(key),
             'Accept': 'application/json'
         }
 
