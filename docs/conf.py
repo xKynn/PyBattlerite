@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
+# -*- coding: utf-8 -*-
 # AsyncBattlerite documentation build configuration file, created by
 # sphinx-quickstart on Thu Dec  7 11:29:05 2017.
 #
@@ -18,8 +18,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
-sys.path.insert(0, 'I:\\asyncbattlerite\\asyncbattlerite')
-sys.path.insert(0, 'I:\\asyncbattlerite')
+import os
+sys.path.insert(0, os.path.abspath('../'))
 
 numpydoc_show_class_members = False
 # -- General configuration ------------------------------------------------
