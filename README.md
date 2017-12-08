@@ -5,6 +5,8 @@ An asynchronous python wrapper for madglory's [Battlerite API](http://battlerite
 ```
 pip install asyncbattlerite
 ```
+## Documentation
+The docs below are outdated, you can visit https://xkynn.github.io/AsyncBattlerite/ for the updated docs, thanks!
 
 ## Basic Usage
 
