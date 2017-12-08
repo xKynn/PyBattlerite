@@ -6,13 +6,23 @@ from .errors import BRPaginationError
 
 
 def _get_object(lst, _id):
-    """Internal function to grab data referenced inside response['included']"""
+    """
+    Internal function to grab data referenced inside response['included']
+    """
     for item in lst:
         if item['id'] == _id:
             return item
 
 
 class BaseBRObject:
+    """
+    A base object for most data classes
+    
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    """
     __slots__ = ['id']
 
     def __init__(self, data):
@@ -20,10 +30,25 @@ class BaseBRObject:
 
 
 class Player(BaseBRObject):
-    __slots__ = ['id']
+    """
+    A class that holds general user data, if this is through a Match, this will not have
+    name, picture and title, only an ID
+    
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    name : The player's name
+    picture : The picture ID for this player
+    title : This player's ingame title
+    """
+    __slots__ = ['id', 'name', 'picture', 'title']
 
     def __init__(self, data):
         super().__init__(data)
+        self.name = data['attributes'].get('name')
+        self.picture = data['attributes'].get('picture')
+        self.title = data['attributes'].get('title')
 
     def __repr__(self):
         return "<Player: id={}>".format(self.id)
@@ -39,6 +64,36 @@ class Team(BaseBRObject):
 
 
 class Participant(BaseBRObject):
+    """
+    A class that holds data about a participant in a match.
+        
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    actor : int
+    shard_id : str
+    attachment : int
+    emote : int
+    mount : int
+    outfit : int
+    side : int
+    ability_uses : Optional[int]
+    damage_done : Optional[int]
+    damage_received : Optional[int]
+    deaths : Optional[int]
+    disables_done : Optional[int]
+    disables_received : Optional[int]
+    energy_gained : Optional[int]
+    energy_used : Optional[int]
+    healing_done : Optional[int]
+    healing_received : Optional[int]
+    kills : Optional[int]
+    score : Optional[int]
+    time_alive : Optional[int]
+    user_id : Optional[int]
+    player : Optional[:class:`Player`]
+    """
     __slots__ = ['actor', 'shard_id', 'attachment', 'emote', 'mount', 'outfit', 'player', 'side', 'ability_uses',
                  'damage_done', 'damage_received', 'deaths', 'disables_done', 'disables_received', 'energy_gained',
                  'energy_used', 'healing_done', 'healing_received', 'kills', 'score', 'time_alive', 'user_id']
@@ -82,6 +137,20 @@ class Participant(BaseBRObject):
 
 
 class Round(BaseBRObject):
+    """
+    A class that holds general data about a round.
+
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    duration : int
+        Duration in seconds of this round.
+    ordinal : int
+        The round number this round was in a match.
+    winning_team : int
+        Signifies which of the teams/rosters won the round.
+    """
     __slots__ = ['duration', 'ordinal', 'winning_team', 'participants']
 
     def __init__(self, _round, included):
@@ -96,6 +165,22 @@ class Round(BaseBRObject):
 
 
 class Roster(BaseBRObject):
+    """
+    A class that holds data about one of the two teams in a match.
+
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    shard_id : str
+        The shard on which this roster data resides, only `global` is available at the moment.
+    score : int
+        The roster's overall score for a match.
+    won : bool
+        Signifies if the roster won a match.
+    participants : list
+       A list of :class:`Participant` representing players that are part of the roster.
+    """
     __slots__ = ['shard_id', 'score', 'won', 'participants', 'team']
 
     def __init__(self, roster, included):
@@ -114,6 +199,41 @@ class Roster(BaseBRObject):
 
 
 class Match(BaseBRObject):
+    """
+    A class that holds data for a match.
+
+    .. _datetime.datetime: https://docs.python.org/3.6/library/datetime.html#datetime-objects
+    .. _aiohttp.ClientSession: https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session
+
+    Attributes
+    ----------
+    id : int
+        A general unique ID for each type of data.
+    created_at : datetime.datetime_
+        Time when the match was created.
+    duration : int
+        The match's duration in seconds.
+    game_mode : str
+        The gamemode this match was of.
+    patch : str
+        The Battlerite patch version this match was played on.
+    shard_id : str
+        The shard on which this match data resides, only `global` is available at the moment.
+    map_id : int
+        The match's map's ID.
+    type : str
+        The match type, ex: `QUICK2V2 `.
+    rosters : list
+        A list of :class:`Roster` objects representing rosters taking part in the match.
+    rounds : list
+        A list of :class:`Round` objects representing each round in the match.
+    spectators : list
+        A list of :class:`Participant` objects representing spectators, this seems unimplemented in the game as of now.
+    telemetry_url : str
+        URL for the telemetry file for this match
+    session : Optional[aiohttp.ClientSession_]
+        Optional session to use to request match data.
+    """
     __slots__ = ['created_at', 'duration', 'game_mode', 'patch', 'shard_id', 'map_id', 'type', 'telemetry_url',
                  'rosters', 'rounds', 'spectators', 'session']
 
@@ -145,6 +265,21 @@ class Match(BaseBRObject):
         return "<Match: id={0} shard_id={1}>".format(self.id, self.shard_id)
 
     async def get_telemetry(self, session=None):
+        """
+        Get telemetry data for a match.
+
+        .. _aiohttp.ClientSession: https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session
+
+        Parameters
+        ----------
+        session : Optional[aiohttp.ClientSession_]
+            Optional session to use to request telemetry data.
+
+        Returns
+        -------
+        `dict`
+            Match telemetry data
+        """
         sess = session or self.session
         async with sess.get(self.telemetry_url, headers={'Accept': 'application/json'}) as resp:
             data = await resp.json()
@@ -155,6 +290,9 @@ class Match(BaseBRObject):
 
 
 class MatchPaginator:
+    """
+    Returned only by BRClient.get_matches
+    """
     __slots__ = ['matches', 'next_url', 'first_url', 'client', 'prev_url', 'offset']
 
     def __init__(self, matches, data, client):
@@ -188,6 +326,26 @@ class MatchPaginator:
         return matches
 
     async def next(self, session=None):
+        """
+        Move to the next page of matches.
+
+        .. _aiohttp.ClientSession: https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session
+
+        Parameters
+        ----------
+        session : Optional[aiohttp.ClientSession_]
+            Optional session to use to request telemetry data.
+
+        Returns
+        -------
+        `list`
+            A list of :class:`Match`.
+
+        Raises
+        ------
+        BRPaginationError
+            The current page is the last page of results
+        """
         if self.next_url:
             matches = await self._matchmaker(self.next_url, session)
             return matches
@@ -195,10 +353,46 @@ class MatchPaginator:
             raise BRPaginationError("This is the last page")
 
     async def first(self, session=None):
+        """
+        Move to the first page of matches.
+
+        .. _aiohttp.ClientSession: https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session
+
+        Parameters
+        ----------
+        session : Optional[aiohttp.ClientSession_]
+            Optional session to use to request telemetry data.
+
+        Returns
+        -------
+        `list`
+            A list of :class:`Match`.
+
+        """
         matches = await self._matchmaker(self.first_url, session)
         return matches
 
     async def prev(self, session=None):
+        """
+        Move to the previous page of matches.
+
+        .. _aiohttp.ClientSession: https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session
+
+        Parameters
+        ----------
+        session : Optional[aiohttp.ClientSession_]
+            Optional session to use to request telemetry data.
+
+        Returns
+        -------
+        `list`
+            A list of :class:`Match`.
+
+        Raises
+        ------
+        BRPaginationError
+            The current page is the first page of results
+        """
         if self.prev_url:
             matches = await self._matchmaker(self.prev_url, session)
             return matches
