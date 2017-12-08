@@ -2,8 +2,8 @@ import asyncio
 import aiohttp
 import datetime
 
-from .models import Player, Match, MatchPaginator
-from .errors import BRRequestException, NotFoundException, BRServerException, BRFilterException
+from asyncbattlerite.models import Player, Match, MatchPaginator
+from asyncbattlerite.errors import BRRequestException, NotFoundException, BRServerException, BRFilterException
 
 
 class BRClient:

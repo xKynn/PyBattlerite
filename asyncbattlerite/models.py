@@ -2,7 +2,7 @@ import datetime
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
-from .errors import BRPaginationError
+from asyncbattlerite.errors import BRPaginationError
 
 
 def _get_object(lst, _id):
