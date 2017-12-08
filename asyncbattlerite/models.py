@@ -38,9 +38,12 @@ class Player(BaseBRObject):
     ----------
     id : int
         A general unique ID for each type of data.
-    name : The player's name
-    picture : The picture ID for this player
-    title : This player's ingame title
+    name : str
+        The player's name
+    picture : int
+        The picture ID for this player
+    title : int
+        This player's ingame title
     """
     __slots__ = ['id', 'name', 'picture', 'title']
 
