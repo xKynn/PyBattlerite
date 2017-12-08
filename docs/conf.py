@@ -19,7 +19,7 @@
 #
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.getcwd(), '../..')))
 
 numpydoc_show_class_members = False
 # -- General configuration ------------------------------------------------
