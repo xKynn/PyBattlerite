@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to AsyncBattlerite’s documentation! &#8212; AsyncBattlerite 0.5.4 documentation</title>
+    <title>Welcome to AsyncBattlerite’s documentation! &#8212; AsyncBattlerite 0.5.8 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.4',
+        VERSION:     '0.5.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -40,16 +40,37 @@
             
   <div class="section" id="welcome-to-asyncbattlerite-s-documentation">
 <h1>Welcome to AsyncBattlerite’s documentation!<a class="headerlink" href="#welcome-to-asyncbattlerite-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
+<p>Basic Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">asyncbattlerite</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">brc</span> <span class="o">=</span> <span class="n">asyncbattlerite</span><span class="o">.</span><span class="n">BRClient</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">)</span>
+
+<span class="c1"># You can also provide an aiohttp.ClientSession to the BRClient constructor</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span>
+<span class="n">brc_a</span> <span class="o">=</span> <span class="n">asyncbattlerite</span><span class="o">.</span><span class="n">BRClient</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+<span class="c1"># Get 3 matches after specified time</span>
+<span class="c1"># after and before can also be datetime.datetime objects</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">brc</span><span class="o">.</span><span class="n">get_matches</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s2">&quot;2017-11-22T20:34:58Z&quot;</span><span class="p">))</span>
+
+<span class="c1"># Go to the next pages of matches</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
+
+<span class="c1"># Get telemetry data for one of the matches</span>
+<span class="n">telemetry</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_telemetry</span><span class="p">())</span>
+</pre></div>
 </div>
+<div class="section" id="module-asyncbattlerite.brclient">
+<span id="asyncbattlerite-brclient"></span><h2>asyncbattlerite.BRClient<a class="headerlink" href="#module-asyncbattlerite.brclient" title="Permalink to this headline">¶</a></h2>
+<p>Used by autodoc_mock_imports.</p>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
+<div class="section" id="module-asyncbattlerite.models">
+<span id="asyncbattlerite-models"></span><h2>asyncbattlerite.Models<a class="headerlink" href="#module-asyncbattlerite.models" title="Permalink to this headline">¶</a></h2>
+<p>Used by autodoc_mock_imports.</p>
+</div>
 </div>
 
 
