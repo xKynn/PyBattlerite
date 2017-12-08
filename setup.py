@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name = "asyncbattlerite",
-    packages = ['AsyncBattlerite'],
+    packages = ['asyncbattlerite'],
     version = "0.5.6",
     description= "A non-blocking async wrapper for the madglory Battlerite API",
     author = "xKynn",
