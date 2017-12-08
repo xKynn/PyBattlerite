@@ -19,7 +19,10 @@
 #
 import sys
 import os
+#import asyncbattlerite
 sys.path.insert(0, os.path.normpath(os.path.join(os.getcwd(), '../..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.getcwd(), '../')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.getcwd(), '../asyncbattlerite')))
 
 numpydoc_show_class_members = False
 # -- General configuration ------------------------------------------------
