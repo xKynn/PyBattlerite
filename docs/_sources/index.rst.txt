@@ -31,9 +31,16 @@ asyncbattlerite.BRClient
     :members:
     :show-inheritance:
 
-asyncbattlerite.Models
+asyncbattlerite.models
 ----------------------
 
 .. automodule:: asyncbattlerite.models
+    :members:
+    :show-inheritance:
+
+asyncbattlerite.errors
+----------------------
+
+.. automodule:: asyncbattlerite.errors
     :members:
     :show-inheritance:

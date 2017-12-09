@@ -240,7 +240,7 @@
 
 </div>
 <div class="section" id="module-asyncbattlerite.models">
-<span id="asyncbattlerite-models"></span><h2>asyncbattlerite.Models<a class="headerlink" href="#module-asyncbattlerite.models" title="Permalink to this headline">¶</a></h2>
+<span id="asyncbattlerite-models"></span><h2>asyncbattlerite.models<a class="headerlink" href="#module-asyncbattlerite.models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="asyncbattlerite.models.BaseBRObject">
 <em class="property">class </em><code class="descclassname">asyncbattlerite.models.</code><code class="descname">BaseBRObject</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.models.BaseBRObject" title="Permalink to this definition">¶</a></dt>
@@ -601,6 +601,58 @@ name, picture and title, only an ID</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-asyncbattlerite.errors">
+<span id="asyncbattlerite-errors"></span><h2>asyncbattlerite.errors<a class="headerlink" href="#module-asyncbattlerite.errors" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="asyncbattlerite.errors.BRFilterException">
+<em class="property">exception </em><code class="descclassname">asyncbattlerite.errors.</code><code class="descname">BRFilterException</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.errors.BRFilterException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Raised when an invalid filter value is supplied.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="asyncbattlerite.errors.BRPaginationError">
+<em class="property">exception </em><code class="descclassname">asyncbattlerite.errors.</code><code class="descname">BRPaginationError</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.errors.BRPaginationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Raised when <a class="reference internal" href="#asyncbattlerite.models.MatchPaginator.next" title="asyncbattlerite.models.MatchPaginator.next"><code class="xref py py-meth docutils literal"><span class="pre">asyncbattlerite.models.MatchPaginator.next()</span></code></a> or <a class="reference internal" href="#asyncbattlerite.models.MatchPaginator.prev" title="asyncbattlerite.models.MatchPaginator.prev"><code class="xref py py-meth docutils literal"><span class="pre">asyncbattlerite.models.MatchPaginator.prev()</span></code></a>
+are called when the paginator is on the last or first page respectively.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="asyncbattlerite.errors.BRRequestException">
+<em class="property">exception </em><code class="descclassname">asyncbattlerite.errors.</code><code class="descname">BRRequestException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.errors.BRRequestException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>General purpose exception, base class for other request related exceptions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>response</strong> : <a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#aiohttp.ClientResponse">aiohttp.ClientResponse</a></p>
+<p><strong>data</strong> : dict</p>
+<blockquote class="last">
+<div><p>The json response from the API</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="exception">
+<dt id="asyncbattlerite.errors.BRServerException">
+<em class="property">exception </em><code class="descclassname">asyncbattlerite.errors.</code><code class="descname">BRServerException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.errors.BRServerException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#asyncbattlerite.errors.BRRequestException" title="asyncbattlerite.errors.BRRequestException"><code class="xref py py-class docutils literal"><span class="pre">asyncbattlerite.errors.BRRequestException</span></code></a></p>
+<p>Exception that signifies that the server failed to respond with valid data.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="asyncbattlerite.errors.NotFoundException">
+<em class="property">exception </em><code class="descclassname">asyncbattlerite.errors.</code><code class="descname">NotFoundException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.errors.NotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#asyncbattlerite.errors.BRRequestException" title="asyncbattlerite.errors.BRRequestException"><code class="xref py py-class docutils literal"><span class="pre">asyncbattlerite.errors.BRRequestException</span></code></a></p>
+<p>For the 404s</p>
 </dd></dl>
 
 </div>
