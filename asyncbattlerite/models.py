@@ -49,9 +49,10 @@ class Player(BaseBRObject):
 
     def __init__(self, data):
         super().__init__(data)
-        self.name = data['attributes'].get('name')
-        self.picture = data['attributes'].get('picture')
-        self.title = data['attributes'].get('title')
+        if data.get('attributes'):
+            self.name = data['attributes']['name']
+            self.picture = data['attributes']['stats']['picture']
+            self.title = data['attributes']['stats']['title']
 
     def __repr__(self):
         return "<Player: id={}>".format(self.id)
@@ -191,7 +192,7 @@ class Roster(BaseBRObject):
         data = _get_object(included, roster['id'])
         self.shard_id = data['attributes']['shardId']
         self.score = data['attributes']['stats']['score']
-        self.won = data['attributes']['won']
+        self.won = True if data['attributes']['won'] == 'true' else False
 
         self.participants = []
         for participant in data['relationships']['participants']['data']:
@@ -242,7 +243,7 @@ class Match(BaseBRObject):
 
     def __init__(self, data, session, included=None):
         included = included or data['included']
-        data = data['data'] if included else data
+        data = data if included else data['data']
         super().__init__(data)
         self.created_at = datetime.datetime.strptime(data['attributes']['createdAt'], "%Y-%m-%dT%H:%M:%SZ")
         self.duration = data['attributes']['duration']
