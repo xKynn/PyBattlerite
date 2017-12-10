@@ -16,7 +16,7 @@ class BRClient:
     ----------
     key : str
         The official Battlerite API key
-    session: Optional[aiohttp.ClientSession_]
+    session : Optional[aiohttp.ClientSession_]
     """
     def __init__(self, key, session: aiohttp.ClientSession=None):
         self.session = session or aiohttp.ClientSession()
@@ -65,8 +65,8 @@ class BRClient:
         match_id : int or str
 
         Returns
-        ------
-        :class:`Match`
+        -------
+        :class:`asyncbattlerite.models.Match`
             A match object representing the requested match.
         """
         data = await self.gen_req("{0}matches/{1}".format(self.base_url, match_id))
@@ -105,12 +105,12 @@ class BRClient:
         playerids : list
             Filter to only return matches with provided players in them by looking for their player IDs.
         teamnames : list
-            Filter to only return matches where provided team names are playing returns - MatchPaginator
+            Filter to only return matches where provided team names are playing.
         gamemode : str
 
         Returns
         -------
-        :class:`MatchPaginator`
+        :class:`asyncbattlerite.models.MatchPaginator`
             A MatchPaginator instance representing a get_matches request
         """
         # Check compatibility 'after' and 'before' with iso8601
@@ -174,7 +174,7 @@ class BRClient:
         matches = []
         for match in data['data']:
             matches.append(Match(match, self.session, data['included']))
-        return MatchPaginator(matches,data['links'], self)
+        return MatchPaginator(matches, data['links'], self)
 
     async def player_by_id(self, player_id: int):
         """
@@ -186,7 +186,7 @@ class BRClient:
 
         Returns
         -------
-        :class:`Player`
+        :class:`asyncbattlerite.models.Player`
             A Player object representing the requested player
         """
         data = await self.gen_req("{0}players/{1}".format(self.base_url, player_id))
@@ -199,13 +199,16 @@ class BRClient:
         Parameters
         ----------
         playerids : list
-            A list of playerids, either a `list` of strs or a `list` of ints
+            A list of playerids, either a `list` of strs or a `list` of ints.
+            Max list length is 6.
 
         Returns
         -------
         list
-            A list of :class:`Player`
+            A list of :class:`asyncbattlerite.models.Player`
         """
+        if not len(playerids) <= 6:
+            raise BRFilterException("Only a maximum of 6 playerIDs are allowed for a single request of get_players.")
         params = {'filter[playerIds]': ','.join(playerids)}
         data = await self.gen_req("{0}players", params=params)
         return [Player(player) for player in data['data']]
