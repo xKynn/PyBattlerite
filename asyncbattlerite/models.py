@@ -338,7 +338,7 @@ class MatchPaginator:
         Parameters
         ----------
         session : Optional[aiohttp.ClientSession_]
-            Optional session to use to request telemetry data.
+            Optional session to use to make this request.
 
         Returns
         -------
@@ -365,7 +365,7 @@ class MatchPaginator:
         Parameters
         ----------
         session : Optional[aiohttp.ClientSession_]
-            Optional session to use to request telemetry data.
+            Optional session to use to make this request.
 
         Returns
         -------
@@ -385,7 +385,7 @@ class MatchPaginator:
         Parameters
         ----------
         session : Optional[aiohttp.ClientSession_]
-            Optional session to use to request telemetry data.
+            Optional session to use to make this request.
 
         Returns
         -------
