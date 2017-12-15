@@ -15,10 +15,24 @@ class BRClient:
     Parameters
     ----------
     key : str
-        The official Battlerite API key
+        The official Battlerite API key.
     session : Optional[aiohttp.ClientSession_]
+    lang : str, Default['English']
+        The language to localise game specific strings in.\n
+        Currently available languages are:\n
+        `Brazilian, English, French, German, Italian, Japanese, Korean,
+        Polish, Romanian, Russian, SChinese, Spanish, Turkish.`
     """
-    def __init__(self, key, session: aiohttp.ClientSession=None):
+    avl_langs = ['Brazilian', 'English', 'French', 'German', 'Italian', 
+                 'Japanese', 'Korean', 'Polish', 'Romanian', 'Russian', 
+                 'SChinese', 'Spanish', 'Turkish']
+
+    def __init__(self, key, session: aiohttp.ClientSession=None, lang: str='English'):
+        if lang in self.avl_langs:
+            self.lang = lang
+        else:
+            raise Exception('{0} is not an available language.\nAs of now only'
+                            'these languages are available:{1}'.format(lang, ', '.join(self.avl_langs)))
         self.session = session or aiohttp.ClientSession()
         self.base_url = "https://api.dc01.gamelockerapp.com/shards/global/"
         self.status_url = "https://api.dc01.gamelockerapp.com/status"
@@ -166,7 +180,7 @@ class BRClient:
         if playernames:
             params['filter[playerNames]'] = ','.join(playernames)
         if playerids:
-            params['filter[playerIds]'] = ','.join(str(playerids))
+            params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
         if teamnames:
             params['filter[teamNames]'] = ','.join(teamnames)
 
@@ -190,25 +204,39 @@ class BRClient:
             A Player object representing the requested player
         """
         data = await self.gen_req("{0}players/{1}".format(self.base_url, player_id))
-        return Player(data['data'])
+        return Player(data['data'], self.lang)
 
-    async def get_players(self, playerids: list):
+    async def get_players(self, playerids: list=None, steamids: list=None):
         """
         Get multiple players' info at once.
+
+        .. _here: https://developer.valvesoftware.com/wiki/SteamID
 
         Parameters
         ----------
         playerids : list
             A list of playerids, either a `list` of strs or a `list` of ints.
             Max list length is 6.
+        steamids : list
+            A list of steamids, a `list` of ints, this accepts only `SteamID64` specification, check here_ for more
+            details.
+            Max list length is 6
 
         Returns
         -------
         list
             A list of :class:`asyncbattlerite.models.Player`
         """
-        if not len(playerids) <= 6:
+        if not playerids and not steamids:
+            raise BRFilterException("One of either of the filters 'playerids' or 'steamids' is required.")
+        if playerids and not len(playerids) <= 6:
             raise BRFilterException("Only a maximum of 6 playerIDs are allowed for a single request of get_players.")
-        params = {'filter[playerIds]': ','.join(playerids)}
-        data = await self.gen_req("{0}players", params=params)
-        return [Player(player) for player in data['data']]
+        if steamids and not len(steamids) <= 6:
+            raise BRFilterException("Only a maximum of 6 steamIDs are allowed for a single request of get_players.")
+        params = {}
+        if playerids:
+            params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
+        if steamids:
+            params['filter[steamIds]'] = ','.join([str(_id) for _id in steamids])
+        data = await self.gen_req("{0}players".format(self.base_url), params=params)
+        return [Player(player, self.lang) for player in data['data']]

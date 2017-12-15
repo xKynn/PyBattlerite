@@ -69,7 +69,6 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">asyncbattlerite</span>
 
-<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 <span class="n">brc</span> <span class="o">=</span> <span class="n">asyncbattlerite</span><span class="o">.</span><span class="n">BRClient</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">)</span>
 
 <span class="c1"># You can also provide an aiohttp.ClientSession to the BRClient constructor</span>
@@ -78,20 +77,20 @@
 
 <span class="c1"># Get 3 matches after specified time</span>
 <span class="c1"># after and before can also be datetime.datetime objects</span>
-<span class="n">matches</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">brc</span><span class="o">.</span><span class="n">get_matches</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s2">&quot;2017-11-22T20:34:58Z&quot;</span><span class="p">))</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="k">await</span> <span class="n">brc</span><span class="o">.</span><span class="n">get_matches</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s2">&quot;2017-11-22T20:34:58Z&quot;</span><span class="p">)</span>
 
 <span class="c1"># Go to the next pages of matches</span>
-<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
+<span class="k">await</span> <span class="n">matches</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
 <span class="c1"># Get telemetry data for one of the matches</span>
-<span class="n">telemetry</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_telemetry</span><span class="p">())</span>
+<span class="n">telemetry</span> <span class="o">=</span> <span class="k">await</span> <span class="n">matches</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_telemetry</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="module-asyncbattlerite.brclient">
 <span id="asyncbattlerite-brclient"></span><h2>asyncbattlerite.BRClient<a class="headerlink" href="#module-asyncbattlerite.brclient" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="asyncbattlerite.brclient.BRClient">
-<em class="property">class </em><code class="descclassname">asyncbattlerite.brclient.</code><code class="descname">BRClient</code><span class="sig-paren">(</span><em>key</em>, <em>session: aiohttp.client.ClientSession = None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.brclient.BRClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">asyncbattlerite.brclient.</code><code class="descname">BRClient</code><span class="sig-paren">(</span><em>key</em>, <em>session: aiohttp.client.ClientSession = None</em>, <em>lang: str = 'English'</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.brclient.BRClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Top level class for user to interact with the API.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -100,9 +99,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
 <blockquote>
-<div><p>The official Battlerite API key</p>
+<div><p>The official Battlerite API key.</p>
 </div></blockquote>
-<p class="last"><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<p><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<p><strong>lang</strong> : str, Default[‘English’]</p>
+<blockquote class="last">
+<div><p>The language to localise game specific strings in.</p>
+<p>Currently available languages are:</p>
+<p><cite>Brazilian, English, French, German, Italian, Japanese, Korean,
+Polish, Romanian, Russian, SChinese, Spanish, Turkish.</cite></p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -158,7 +164,7 @@
 
 <dl class="method">
 <dt id="asyncbattlerite.brclient.BRClient.get_players">
-<code class="descname">get_players</code><span class="sig-paren">(</span><em>playerids: list</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.brclient.BRClient.get_players" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_players</code><span class="sig-paren">(</span><em>playerids: list = None</em>, <em>steamids: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.brclient.BRClient.get_players" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get multiple players’ info at once.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -168,6 +174,12 @@
 <blockquote>
 <div><p>A list of playerids, either a <cite>list</cite> of strs or a <cite>list</cite> of ints.
 Max list length is 6.</p>
+</div></blockquote>
+<p><strong>steamids</strong> : list</p>
+<blockquote>
+<div><p>A list of steamids, a <cite>list</cite> of ints, this accepts only <cite>SteamID64</cite> specification, check <a class="reference external" href="https://developer.valvesoftware.com/wiki/SteamID">here</a> for more
+details.
+Max list length is 6</p>
 </div></blockquote>
 </td>
 </tr>
@@ -518,7 +530,7 @@ Max list length is 6.</p>
 
 <dl class="class">
 <dt id="asyncbattlerite.models.Player">
-<em class="property">class </em><code class="descclassname">asyncbattlerite.models.</code><code class="descname">Player</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.models.Player" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">asyncbattlerite.models.</code><code class="descname">Player</code><span class="sig-paren">(</span><em>data</em>, <em>lang: str</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.models.Player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#asyncbattlerite.models.BaseBRObject" title="asyncbattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">asyncbattlerite.models.BaseBRObject</span></code></a></p>
 <p>A class that holds general user data, if this is through a Match, this will not have
 name, picture and title, only an ID</p>
@@ -602,6 +614,56 @@ name, picture and title, only an ID</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-asyncbattlerite.utils">
+<span id="asyncbattlerite-utils"></span><h2>asyncbattlerite.utils<a class="headerlink" href="#module-asyncbattlerite.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asyncbattlerite.utils.Localizer">
+<em class="property">class </em><code class="descclassname">asyncbattlerite.utils.</code><code class="descname">Localizer</code><span class="sig-paren">(</span><em>lang</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.utils.Localizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Use this to manually localize any data with an available <cite>loc_id</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str</p>
+<blockquote class="last">
+<div><p>The language to localise game specific strings in.</p>
+<p>Currently available languages are:</p>
+<p><cite>Brazilian, English, French, German, Italian, Japanese, Korean,
+Polish, Romanian, Russian, SChinese, Spanish, Turkish.</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="asyncbattlerite.utils.Localizer.localize">
+<code class="descname">localize</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncbattlerite.utils.Localizer.localize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call to return a localized string for your id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_id</strong> : str</p>
+<blockquote>
+<div><p>An id that refers to the name of an object in multiple languages.</p>
+<p>Example: ‘035ad4c27697469e8163040ae0a4f796’</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
+<blockquote class="last">
+<div><p>A localized string in the <a class="reference internal" href="#asyncbattlerite.utils.Localizer" title="asyncbattlerite.utils.Localizer"><code class="xref py py-class docutils literal"><span class="pre">Localizer</span></code></a>’s set language.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>

@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 from asyncbattlerite.errors import BRPaginationError
+from asyncbattlerite.utils import StackableFinder, Localizer
 
 
 def _get_object(lst, _id):
@@ -45,14 +46,30 @@ class Player(BaseBRObject):
     title : int
         This player's ingame title
     """
-    __slots__ = ['id', 'name', 'picture', 'title']
+    __slots__ = ['id', 'name', 'picture', 'title', 'stats']
 
-    def __init__(self, data):
+    def __init__(self, data, lang: str):
+        print('in player')
         super().__init__(data)
         if data.get('attributes'):
             self.name = data['attributes']['name']
-            self.picture = data['attributes']['stats']['picture']
-            self.title = data['attributes']['stats']['title']
+            self.picture = data['attributes']['stats'].pop('picture')
+            self.title = data['attributes']['stats'].pop('title')
+            stackables = StackableFinder()
+            localizer = Localizer(lang)
+            self.stats = {}
+            for key, value in data['attributes']['stats'].items():
+                _item = stackables.find(key)
+                if _item is not None:
+                    try:
+                        print(_item['LocalizedName'])
+                    except:
+                        pass
+                    name = localizer.localize(_item['LocalizedName']) if _item['LocalizedName'] else _item['DevName']
+                    self.stats[key] = {'localized_name': name,
+                                       'xp': value}
+                    if _item['LocalizedName']:
+                        self.stats[key]['loc_id'] = _item['LocalizedName']
 
     def __repr__(self):
         return "<Player: id={}>".format(self.id)
