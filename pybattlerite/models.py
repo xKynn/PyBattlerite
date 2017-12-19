@@ -49,7 +49,6 @@ class Player(BaseBRObject):
     __slots__ = ['id', 'name', 'picture', 'title', 'stats']
 
     def __init__(self, data, lang: str='English'):
-        print('in player')
         super().__init__(data)
         if data.get('attributes'):
             self.name = data['attributes']['name']
