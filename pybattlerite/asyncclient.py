@@ -2,11 +2,16 @@ import asyncio
 import aiohttp
 import datetime
 
-from asyncbattlerite.models import Player, Match, MatchPaginator
-from asyncbattlerite.errors import BRRequestException, NotFoundException, BRServerException, BRFilterException
+from .clientbase import ClientBase
+from .models import Player, AsyncMatch, AsyncMatchPaginator
+from .errors import BRRequestException
+from .errors import NotFoundException
+from .errors import BRServerException
+from .errors import BRFilterException
+from .errors import EmptyResponseException
 
 
-class BRClient:
+class AsyncClient(ClientBase):
     """
     Top level class for user to interact with the API.
 
@@ -23,10 +28,6 @@ class BRClient:
         `Brazilian, English, French, German, Italian, Japanese, Korean,
         Polish, Romanian, Russian, SChinese, Spanish, Turkish.`
     """
-    avl_langs = ['Brazilian', 'English', 'French', 'German', 'Italian', 
-                 'Japanese', 'Korean', 'Polish', 'Romanian', 'Russian', 
-                 'SChinese', 'Spanish', 'Turkish']
-
     def __init__(self, key, session: aiohttp.ClientSession=None, lang: str='English'):
         if lang in self.avl_langs:
             self.lang = lang
@@ -80,25 +81,13 @@ class BRClient:
 
         Returns
         -------
-        :class:`asyncbattlerite.models.Match`
+        :class:`pybattlerite.models.AsyncMatch`
             A match object representing the requested match.
         """
         data = await self.gen_req("{0}matches/{1}".format(self.base_url, match_id))
-        return Match(data, self.session)
+        return AsyncMatch(data, self.session)
 
-    @staticmethod
-    def _isocheck(time):
-        """
-        Check if a time string is compatible with iso8601
-        """
-        try:
-            datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:%SZ")
-            return True
-        except ValueError:
-            return False
-
-    async def get_matches(self, offset: int=None, limit: int=None, after=None, before=None, playernames: list=None,
-                          playerids: list=None, teamnames: list=None, gamemode: str=None):
+    async def get_matches(self, offset: int=None, limit: int=None, after=None, before=None, playerids: list=None):
         """
         Access the /matches endpoint and grab a list of matches
 
@@ -114,17 +103,11 @@ class BRClient:
             Filter to return matches after provided time period, if an str is provided it should follow the **iso8601** format.
         before :  Optional[str or datetime.datetime_]
             Filter to return matches before provided time period, if an str is provided it should follow the **iso8601** format.
-        playernames : list
-            Filter to only return matches with provided players in them by looking for their player names.
         playerids : list
             Filter to only return matches with provided players in them by looking for their player IDs.
-        teamnames : list
-            Filter to only return matches where provided team names are playing.
-        gamemode : str
-
         Returns
         -------
-        :class:`asyncbattlerite.models.MatchPaginator`
+        :class:`pybattlerite.models.AsyncMatchPaginator`
             A MatchPaginator instance representing a get_matches request
         """
         # Check compatibility 'after' and 'before' with iso8601
@@ -160,14 +143,14 @@ class BRClient:
                 elif not self._isocheck(before):
                     raise BRFilterException("'before', if instance of 'str', should follow the 'iso8601' format "
                                             "'%Y-%m-%dT%H:%M:%SZ'")
-        # Make sure 'playernames' is a list of 'str's
-        if playernames:
-            if not all([isinstance(player, str) for player in playernames]):
-                raise BRFilterException("'playernames' must be a list of 'str's")
-        # Make sure 'teamnames' is a list of 'str's
-        if teamnames:
-            if not all([isinstance(team, str) for team in teamnames]):
-                raise BRFilterException("'teamnames' must be a list of 'str's")
+        # # Make sure 'playernames' is a list of 'str's
+        # if playernames:
+        #     if not all([isinstance(player, str) for player in playernames]):
+        #         raise BRFilterException("'playernames' must be a list of 'str's")
+        # # Make sure 'teamnames' is a list of 'str's
+        # if teamnames:
+        #     if not all([isinstance(team, str) for team in teamnames]):
+        #         raise BRFilterException("'teamnames' must be a list of 'str's")
         params = {}
         if offset:
             params['page[offset]'] = offset
@@ -177,18 +160,18 @@ class BRClient:
             params['filter[createdAt-start]'] = after
         if before:
             params['filter[createdAt-end]'] = before
-        if playernames:
-            params['filter[playerNames]'] = ','.join(playernames)
+        # if playernames:
+        #     params['filter[playerNames]'] = ','.join(playernames)
         if playerids:
             params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
-        if teamnames:
-            params['filter[teamNames]'] = ','.join(teamnames)
+        # if teamnames:
+        #     params['filter[teamNames]'] = ','.join(teamnames)
 
         data = await self.gen_req("{}matches".format(self.base_url), params=params)
         matches = []
         for match in data['data']:
-            matches.append(Match(match, self.session, data['included']))
-        return MatchPaginator(matches, data['links'], self)
+            matches.append(AsyncMatch(match, self.session, data['included']))
+        return AsyncMatchPaginator(matches, data['links'], self)
 
     async def player_by_id(self, player_id: int):
         """
@@ -200,13 +183,49 @@ class BRClient:
 
         Returns
         -------
-        :class:`asyncbattlerite.models.Player`
-            A Player object representing the requested player
+        :class:`pybattlerite.models.Player`
+            A Player object representing the requested player.
         """
         data = await self.gen_req("{0}players/{1}".format(self.base_url, player_id))
         return Player(data['data'], self.lang)
 
-    async def get_players(self, playerids: list=None, steamids: list=None):
+    async def _players(self, playerids: list=None, steamids: list=None, usernames: list=None, single=False):
+        if not any((playerids, steamids, usernames)):
+            raise BRFilterException("One of the filters 'playerids', 'steamids' and 'usernames' is required.")
+        try:
+            if len(playerids) > 6:
+                raise BRFilterException("Only a maximum of 6 playerIDs are allowed for a single"
+                                        " request of get_players.")
+        except TypeError:
+            pass
+        try:
+            if len(steamids) > 6:
+                raise BRFilterException("Only a maximum of 6 steamIDs are allowed for a single"
+                                        " request of get_players.")
+        except TypeError:
+            pass
+        try:
+            if len(usernames) > 6:
+                raise BRFilterException("Only a maximum of 6 steamIDs are allowed for a single"
+                                        " request of get_players.")
+        except TypeError:
+            pass
+        params = {}
+        if playerids:
+            params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
+        if steamids:
+            params['filter[steamIds]'] = ','.join([str(_id) for _id in steamids])
+        if usernames:
+            params['filter[playerNames]'] = ','.join([str(name) for name in usernames])
+        data = await self.gen_req("{0}players".format(self.base_url), params=params)
+        if len(data['data']) == 0:
+            raise EmptyResponseException("No Players with the specified criteria were found.")
+        if not single:
+            return [Player(player, self.lang) for player in data['data']]
+        else:
+            return Player(data['data'][0], self.lang)
+
+    async def get_players(self, playerids: list=None, steamids: list=None, usernames: list=None):
         """
         Get multiple players' info at once.
 
@@ -221,22 +240,29 @@ class BRClient:
             A list of steamids, a `list` of ints, this accepts only `SteamID64` specification, check here_ for more
             details.
             Max list length is 6
+        usernames : list
+            A list of usernames, a `list` of strings, case insensitive.
+            Max list length is 6
 
         Returns
         -------
         list
-            A list of :class:`asyncbattlerite.models.Player`
+            A list of :class:`pybattlerite.models.Player`
         """
-        if not playerids and not steamids:
-            raise BRFilterException("One of either of the filters 'playerids' or 'steamids' is required.")
-        if playerids and not len(playerids) <= 6:
-            raise BRFilterException("Only a maximum of 6 playerIDs are allowed for a single request of get_players.")
-        if steamids and not len(steamids) <= 6:
-            raise BRFilterException("Only a maximum of 6 steamIDs are allowed for a single request of get_players.")
-        params = {}
-        if playerids:
-            params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
-        if steamids:
-            params['filter[steamIds]'] = ','.join([str(_id) for _id in steamids])
-        data = await self.gen_req("{0}players".format(self.base_url), params=params)
-        return [Player(player, self.lang) for player in data['data']]
+        return await self._players(playerids, steamids, usernames)
+
+    async def player_by_name(self, username):
+        """
+        Get a player's info by their ingame name.
+
+        Parameters
+        ----------
+        username : str
+            Case insensitive username
+
+        Returns
+        -------
+        :class:`pybattlerite.models.Player`
+            A Player object representing the requested player.
+        """
+        return await self._players(usernames=[username], single=True)

@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &#8212; AsyncBattlerite 0.5.8 documentation</title>
+    <title>Index &#8212; PyBattlerite 0.5.8 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AsyncBattlerite 0.5.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyBattlerite 0.5.8 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -69,6 +69,8 @@
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -81,15 +83,13 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#module-asyncbattlerite.brclient">asyncbattlerite.brclient (module)</a>
-</li>
-      <li><a href="index.html#module-asyncbattlerite.errors">asyncbattlerite.errors (module)</a>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient">AsyncClient (class in pybattlerite.asyncclient)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#module-asyncbattlerite.models">asyncbattlerite.models (module)</a>
+      <li><a href="index.html#pybattlerite.models.AsyncMatch">AsyncMatch (class in pybattlerite.models)</a>
 </li>
-      <li><a href="index.html#module-asyncbattlerite.utils">asyncbattlerite.utils (module)</a>
+      <li><a href="index.html#pybattlerite.models.AsyncMatchPaginator">AsyncMatchPaginator (class in pybattlerite.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -97,19 +97,33 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.BaseBRObject">BaseBRObject (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.BaseBRObject">BaseBRObject (class in pybattlerite.models)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient">BRClient (class in asyncbattlerite.brclient)</a>
-</li>
-      <li><a href="index.html#asyncbattlerite.errors.BRFilterException">BRFilterException</a>
+      <li><a href="index.html#pybattlerite.errors.BRFilterException">BRFilterException</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.errors.BRPaginationError">BRPaginationError</a>
+      <li><a href="index.html#pybattlerite.errors.BRPaginationError">BRPaginationError</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.errors.BRRequestException">BRRequestException</a>
+      <li><a href="index.html#pybattlerite.errors.BRRequestException">BRRequestException</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.errors.BRServerException">BRServerException</a>
+      <li><a href="index.html#pybattlerite.errors.BRServerException">BRServerException</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pybattlerite.client.Client">Client (class in pybattlerite.client)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pybattlerite.errors.EmptyResponseException">EmptyResponseException</a>
 </li>
   </ul></td>
 </tr></table>
@@ -117,35 +131,55 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.MatchPaginator.first">first() (asyncbattlerite.models.MatchPaginator method)</a>
+      <li><a href="index.html#pybattlerite.models.AsyncMatchPaginator.first">first() (pybattlerite.models.AsyncMatchPaginator method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.models.MatchPaginator.first">(pybattlerite.models.MatchPaginator method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient.get_matches">get_matches() (asyncbattlerite.brclient.BRClient method)</a>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.get_matches">get_matches() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.get_matches">(pybattlerite.client.Client method)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient.get_players">get_players() (asyncbattlerite.brclient.BRClient method)</a>
+      </ul></li>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.get_players">get_players() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.get_players">(pybattlerite.client.Client method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient.get_status">get_status() (asyncbattlerite.brclient.BRClient method)</a>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.get_status">get_status() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.get_status">(pybattlerite.client.Client method)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.models.Match.get_telemetry">get_telemetry() (asyncbattlerite.models.Match method)</a>
+      </ul></li>
+      <li><a href="index.html#pybattlerite.models.AsyncMatch.get_telemetry">get_telemetry() (pybattlerite.models.AsyncMatch method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.models.Match.get_telemetry">(pybattlerite.models.Match method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.utils.Localizer.localize">localize() (asyncbattlerite.utils.Localizer method)</a>
+      <li><a href="index.html#pybattlerite.utils.Localizer.localize">localize() (pybattlerite.utils.Localizer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.utils.Localizer">Localizer (class in asyncbattlerite.utils)</a>
+      <li><a href="index.html#pybattlerite.utils.Localizer">Localizer (class in pybattlerite.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -153,13 +187,19 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.Match">Match (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.Match">Match (class in pybattlerite.models)</a>
 </li>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.match_by_id">match_by_id() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.match_by_id">(pybattlerite.client.Client method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient.match_by_id">match_by_id() (asyncbattlerite.brclient.BRClient method)</a>
+      <li><a href="index.html#pybattlerite.models.MatchBase">MatchBase (class in pybattlerite.models)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.models.MatchPaginator">MatchPaginator (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.MatchPaginator">MatchPaginator (class in pybattlerite.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -167,11 +207,15 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.MatchPaginator.next">next() (asyncbattlerite.models.MatchPaginator method)</a>
+      <li><a href="index.html#pybattlerite.models.AsyncMatchPaginator.next">next() (pybattlerite.models.AsyncMatchPaginator method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.models.MatchPaginator.next">(pybattlerite.models.MatchPaginator method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.errors.NotFoundException">NotFoundException</a>
+      <li><a href="index.html#pybattlerite.errors.NotFoundException">NotFoundException</a>
 </li>
   </ul></td>
 </tr></table>
@@ -179,15 +223,41 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.Participant">Participant (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.Paginator">Paginator (class in pybattlerite.models)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.models.Player">Player (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.Participant">Participant (class in pybattlerite.models)</a>
 </li>
+      <li><a href="index.html#pybattlerite.models.Player">Player (class in pybattlerite.models)</a>
+</li>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.player_by_id">player_by_id() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.player_by_id">(pybattlerite.client.Client method)</a>
+</li>
+      </ul></li>
+      <li><a href="index.html#pybattlerite.asyncclient.AsyncClient.player_by_name">player_by_name() (pybattlerite.asyncclient.AsyncClient method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.client.Client.player_by_name">(pybattlerite.client.Client method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.brclient.BRClient.player_by_id">player_by_id() (asyncbattlerite.brclient.BRClient method)</a>
+      <li><a href="index.html#pybattlerite.models.AsyncMatchPaginator.prev">prev() (pybattlerite.models.AsyncMatchPaginator method)</a>
+
+      <ul>
+        <li><a href="index.html#pybattlerite.models.MatchPaginator.prev">(pybattlerite.models.MatchPaginator method)</a>
 </li>
-      <li><a href="index.html#asyncbattlerite.models.MatchPaginator.prev">prev() (asyncbattlerite.models.MatchPaginator method)</a>
+      </ul></li>
+      <li><a href="index.html#module-pybattlerite.asyncclient">pybattlerite.asyncclient (module)</a>
+</li>
+      <li><a href="index.html#module-pybattlerite.client">pybattlerite.client (module)</a>
+</li>
+      <li><a href="index.html#module-pybattlerite.errors">pybattlerite.errors (module)</a>
+</li>
+      <li><a href="index.html#module-pybattlerite.models">pybattlerite.models (module)</a>
+</li>
+      <li><a href="index.html#module-pybattlerite.utils">pybattlerite.utils (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -195,11 +265,11 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.Roster">Roster (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.Roster">Roster (class in pybattlerite.models)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#asyncbattlerite.models.Round">Round (class in asyncbattlerite.models)</a>
+      <li><a href="index.html#pybattlerite.models.Round">Round (class in pybattlerite.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -220,11 +290,11 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AsyncBattlerite 0.5.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyBattlerite 0.5.8 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, AsyncBattlerite.
+        &#169; Copyright 2017, PyBattlerite.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>

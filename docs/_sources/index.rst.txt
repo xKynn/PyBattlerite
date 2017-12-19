@@ -1,16 +1,38 @@
-Welcome to AsyncBattlerite's documentation!
+Welcome to PyBattlerite's documentation!
 ===========================================
+
 Basic Usage::
+
+   import pybattlerite
+   import requests
+
+   brc = pybattlerite.Client('your-api-key')
+
+   # You can also provide an aiohttp.ClientSession to the BRClient constructor
+   session = requests.Session()
+   brc_a = pybattlerite.Client('your-api-key', session)
+
+   # Get 3 matches after specified time
+   # after and before can also be datetime.datetime objects
+   matches = brc.get_matches(limit=3, after="2017-11-22T20:34:58Z")
+
+   # Go to the next pages of matches
+   matches.next()
+
+   # Get telemetry data for one of the matches
+   telemetry = matches.matches[0].get_telemetry()
+
+Async Usage::
 
    import aiohttp
    import asyncio
-   import asyncbattlerite
+   import pybattlerite
 
-   brc = asyncbattlerite.BRClient('your-api-key')
+   brc = pybattlerite.AsyncClient('your-api-key')
 
    # You can also provide an aiohttp.ClientSession to the BRClient constructor
    session = aiohttp.ClientSession()
-   brc_a = asyncbattlerite.BRClient('your-api-key', session)
+   brc_a = pybattlerite.AsyncClient('your-api-key', session)
 
    # Get 3 matches after specified time
    # after and before can also be datetime.datetime objects
@@ -23,30 +45,37 @@ Basic Usage::
    telemetry = await matches.matches[0].get_telemetry()
 
 
-asyncbattlerite.BRClient
+pybattlerite.Client
 ------------------------
 
-.. automodule:: asyncbattlerite.brclient
+.. automodule:: pybattlerite.client
     :members:
     :show-inheritance:
 
-asyncbattlerite.models
+pybattlerite.AsyncClient
+------------------------
+
+.. automodule:: pybattlerite.asyncclient
+    :members:
+    :show-inheritance:
+
+pybattlerite.models
 ----------------------
 
-.. automodule:: asyncbattlerite.models
+.. automodule:: pybattlerite.models
     :members:
     :show-inheritance:
 
-asyncbattlerite.utils
+pybattlerite.utils
 ---------------------
 
-.. automodule:: asyncbattlerite.utils
+.. automodule:: pybattlerite.utils
      :members:
      :show-inheritance:
 
-asyncbattlerite.errors
+pybattlerite.errors
 ----------------------
 
-.. automodule:: asyncbattlerite.errors
+.. automodule:: pybattlerite.errors
     :members:
     :show-inheritance:
