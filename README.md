@@ -1,12 +1,13 @@
-# <a href="https://pypi.python.org/pypi/asyncbattlerite">AsyncBattlerite</a>
+# <a href="https://pypi.python.org/pypi/asyncbattlerite">PyBattlerite</a>
 
-An asynchronous python wrapper for madglory's [Battlerite API](http://battlerite-docs.readthedocs.io/en/master/introduction.html)
+A python wrapper for madglory's [Battlerite API](http://battlerite-docs.readthedocs.io/en/master/introduction.html)
+complete with asynchronous and synchronous client implementations.
 
 ```
-pip install asyncbattlerite
+pip install pybattlerite
 ```
 ## Documentation
-The docs below are outdated, you can visit https://xkynn.github.io/AsyncBattlerite/ for the updated docs, thanks!
+Visit https://xkynn.github.io/AsyncBattlerite/ for docs, thanks!
 
 ## A Request
 Please do not bulk scrape data from this API, Stunlock have specified that they would not like users misusing the API
