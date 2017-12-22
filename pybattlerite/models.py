@@ -71,12 +71,33 @@ class Player(BaseBRObject):
 
 
 class Team(BaseBRObject):
-    __slots__ = ['name', 'shard_id']
+    __slots__ = ['name', 'shard_id', 'avatar', 'division', 'division_rating', 'league', 'losses', 'members',
+                 'placement_games_left', 'best_division', 'best_division_rating', 'best_league', 'wins']
 
     def __init__(self, data):
         super().__init__(data)
+        data = data['attributes']
         self.name = data['name']
         self.shard_id = data['shardId']
+        stats = data['stats']
+        self.avatar = stats['avatar']
+        self.division = stats['division']
+        self.division_rating = stats['divisionRating']
+        self.league = stats['league']
+        self.losses = stats['losses']
+        self.members = stats['members']
+        self.placement_games_left = stats['placementGamesLeft']
+        self.best_division = stats['topDivision']
+        self.best_division_rating = stats['topDivisionRating']
+        self.best_league = stats['topLeague']
+        self.wins = stats['wins']
+
+    def __repr__(self):
+        return "<Team: name={0.name} id={0.id}>".format(self)
+
+    @property
+    def in_placement(self):
+        return bool(self.placement_games_left)
 
 
 class Participant(BaseBRObject):
@@ -148,8 +169,8 @@ class Participant(BaseBRObject):
             self.player = None
 
     def __repr__(self):
-        return "<Participant: id={0} shard_id={1} actor={2} bot={3}>".format(self.id, self.shard_id, self.actor,
-                                                                             True if not self.player else False)
+        return "<Participant: id={0.id} shard_id={0.shard_id} actor={0.actor} bot={1}>".format(self, True if not
+                                                                                               self.player else False)
 
 
 class Round(BaseBRObject):
@@ -177,7 +198,7 @@ class Round(BaseBRObject):
         self.winning_team = data['attributes']['stats']['winningTeam']
 
     def __repr__(self):
-        return "<Round: id={} duration={} ordinal={}>".format(self.id, self.duration, self.ordinal)
+        return "<Round: id={0.id} duration={0.duration} ordinal={0.ordinal}>".format(self)
 
 
 class Roster(BaseBRObject):
@@ -211,7 +232,7 @@ class Roster(BaseBRObject):
             self.participants.append(Participant(participant, included))
 
     def __repr__(self):
-        return "<Roster: id={0} shard_id={1} won={2}>".format(self.id, self.shard_id, self.won)
+        return "<Roster: id={0.id} shard_id={0.shard_id} won={0.won}>".format(self)
 
 
 class MatchBase(BaseBRObject):
@@ -286,7 +307,7 @@ class AsyncMatch(MatchBase):
         super().__init__(data, session, included)
 
     def __repr__(self):
-        return "<AsyncMatch: id={0} shard_id={1}>".format(self.id, self.shard_id)
+        return "<AsyncMatch: id={0.id} shard_id={0.shard_id}>".format(self)
 
     async def get_telemetry(self, session=None):
         """
@@ -321,7 +342,7 @@ class Match(MatchBase):
         super().__init__(data, session, included)
 
     def __repr__(self):
-        return "<Match: id={0} shard_id={1}>".format(self.id, self.shard_id)
+        return "<Match: id={0.id} shard_id={0.shard_id}>".format(self)
 
     def get_telemetry(self, session=None):
         """
@@ -380,9 +401,8 @@ class AsyncMatchPaginator(Paginator):
         super().__init__(matches, data, client)
 
     def __repr__(self):
-        return "<AsyncMatchPaginator: offset={0} next={1} prev={2}>".format(self.offset,
-                                                                            True if self.next_url else False,
-                                                                            True if self.prev_url else False)
+        return "<AsyncMatchPaginator: offset={} next={} prev={}>".format(self.offset, bool(self.next_url),
+                                                                         bool(self.prev_url))
 
     async def _matchmaker(self, url, sess=None):
         data = await self.client.gen_req("{}matches".format(url), session=sess)
@@ -476,8 +496,8 @@ class MatchPaginator(Paginator):
         super().__init__(matches, data, client)
 
     def __repr__(self):
-        return "<MatchPaginator: offset={0} next={1} prev={2}>".format(self.offset, True if self.next_url else False,
-                                                                       True if self.prev_url else False)
+        return "<MatchPaginator: offset={} next={} prev={}>".format(self.offset, bool(self.next_url),
+                                                                    bool(self.prev_url))
 
     def _matchmaker(self, url, sess=None):
         data = self.client.gen_req("{}matches".format(url), session=sess)

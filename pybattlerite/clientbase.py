@@ -108,3 +108,15 @@ class ClientBase:
             params['filter[playerNames]'] = ','.join([str(name) for name in usernames])
 
         return params
+
+    @staticmethod
+    def prepare_teams_params(playerids, season):
+        if not all((playerids, season)):
+            raise BRFilterException("Both the filters, 'playerids' and 'season' are required.")
+        params = {
+            'tag[season]': season,
+            'tag[playerIds]': ','.join([str(_id) for _id in playerids])
+        }
+
+        return params
+

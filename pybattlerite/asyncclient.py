@@ -2,7 +2,7 @@ import asyncio
 import aiohttp
 
 from .clientbase import ClientBase
-from .models import Player, AsyncMatch, AsyncMatchPaginator
+from .models import Player, AsyncMatch, AsyncMatchPaginator, Team
 from .errors import BRRequestException
 from .errors import NotFoundException
 from .errors import BRServerException
@@ -187,3 +187,25 @@ class AsyncClient(ClientBase):
             A Player object representing the requested player.
         """
         return await self._players(usernames=[username], single=True)
+
+    async def get_teams(self, playerids: list, season: int):
+        """
+        Get all teams for a player or group of players in a specified season.
+
+        Parameters
+        ----------
+        playerids : list
+            A list of playerids to fetch teams for, this just fetches teams with these playerids
+            in them, it is not an intersection of supplied playerids.
+        season : int
+            The season for which the teams of these playerids must be fetched
+
+        Returns
+        -------
+        list(:class:`pybattlerite.models.Team`)
+            A list of Team objects representing each team from the request.
+        """
+        params = self.prepare_teams_params(playerids, season)
+        data = await self.gen_req("{0}teams".format(self.base_url), params=params)
+        return [Team(team) for team in data['data']]
+

@@ -12,7 +12,10 @@ class BRRequestException(Exception):
     """
     def __init__(self, response, data):
         self.reason = response.reason
-        self.status = response.status
+        try:
+            self.status = response.status
+        except AttributeError:
+            self.status = response.status_code
         self.error = data.get("errors")
         if self.error is not None:
             self.error = self.error[0]['title']
