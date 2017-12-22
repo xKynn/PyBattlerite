@@ -1,0 +1,1175 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to PyBattlerite’s documentation! &#8212; PyBattlerite 0.5.8 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PyBattlerite 0.5.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-pybattlerite-s-documentation">
+<h1>Welcome to PyBattlerite’s documentation!<a class="headerlink" href="#welcome-to-pybattlerite-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Basic Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pybattlerite</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">brc</span> <span class="o">=</span> <span class="n">pybattlerite</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">)</span>
+
+<span class="c1"># You can also provide an aiohttp.ClientSession to the BRClient constructor</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">brc_a</span> <span class="o">=</span> <span class="n">pybattlerite</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+<span class="c1"># Get 3 matches after specified time</span>
+<span class="c1"># after and before can also be datetime.datetime objects</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">brc</span><span class="o">.</span><span class="n">get_matches</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s2">&quot;2017-11-22T20:34:58Z&quot;</span><span class="p">)</span>
+
+<span class="c1"># Go to the next pages of matches</span>
+<span class="n">matches</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+
+<span class="c1"># Get telemetry data for one of the matches</span>
+<span class="n">telemetry</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_telemetry</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Async Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">pybattlerite</span>
+
+<span class="n">brc</span> <span class="o">=</span> <span class="n">pybattlerite</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">)</span>
+
+<span class="c1"># You can also provide an aiohttp.ClientSession to the BRClient constructor</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span>
+<span class="n">brc_a</span> <span class="o">=</span> <span class="n">pybattlerite</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="s1">&#39;your-api-key&#39;</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+<span class="c1"># Get 3 matches after specified time</span>
+<span class="c1"># after and before can also be datetime.datetime objects</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="k">await</span> <span class="n">brc</span><span class="o">.</span><span class="n">get_matches</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s2">&quot;2017-11-22T20:34:58Z&quot;</span><span class="p">)</span>
+
+<span class="c1"># Go to the next pages of matches</span>
+<span class="k">await</span> <span class="n">matches</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+
+<span class="c1"># Get telemetry data for one of the matches</span>
+<span class="n">telemetry</span> <span class="o">=</span> <span class="k">await</span> <span class="n">matches</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_telemetry</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="module-pybattlerite.client">
+<span id="pybattlerite-client"></span><h2>pybattlerite.Client<a class="headerlink" href="#module-pybattlerite.client" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybattlerite.client.Client">
+<em class="property">class </em><code class="descclassname">pybattlerite.client.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>key</em>, <em>session: requests.sessions.Session = None</em>, <em>lang: str = 'English'</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pybattlerite.clientbase.ClientBase</span></code></p>
+<p>Top level class for user to interact with the API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>The official Battlerite API key.</p>
+</div></blockquote>
+<p><strong>session</strong> : Optional[<a class="reference external" href="http://docs.python-requests.org/en/master/api/#request-sessions">requests.Session</a>]</p>
+<p><strong>lang</strong> : str, Default[‘English’]</p>
+<blockquote class="last">
+<div><p>The language to localise game specific strings in.</p>
+<p>Currently available languages are:</p>
+<p><cite>Brazilian, English, French, German, Italian, Japanese, Korean,
+Polish, Romanian, Russian, SChinese, Spanish, Turkish.</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybattlerite.client.Client.get_matches">
+<code class="descname">get_matches</code><span class="sig-paren">(</span><em>offset: int = None</em>, <em>limit: int = None</em>, <em>after=None</em>, <em>before=None</em>, <em>playerids: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.get_matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the /matches endpoint and grab a list of matches</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>offset</strong> : Optional[int]</p>
+<blockquote>
+<div><p>The nth number of match to start the page from.</p>
+</div></blockquote>
+<p><strong>limit</strong> : Optional[int]</p>
+<blockquote>
+<div><p>Number of matches to return.</p>
+</div></blockquote>
+<p><strong>after</strong> : Optional[str or <a class="reference external" href="https://docs.python.org/3.6/library/datetime.html#datetime-objects">datetime.datetime</a>]</p>
+<blockquote>
+<div><p>Filter to return matches after provided time period, if an str is provided it should follow the <strong>iso8601</strong> format.</p>
+</div></blockquote>
+<p><strong>before</strong> :  Optional[str or <a class="reference external" href="https://docs.python.org/3.6/library/datetime.html#datetime-objects">datetime.datetime</a>]</p>
+<blockquote>
+<div><p>Filter to return matches before provided time period, if an str is provided it should follow the <strong>iso8601</strong> format.</p>
+</div></blockquote>
+<p><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>Filter to only return matches with provided players in them by looking for their player IDs.</p>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p><strong>——-</strong></p>
+<p><strong>:class:`pybattlerite.models.MatchPaginator`</strong></p>
+<blockquote class="last">
+<div><p>A MatchPaginator instance representing a get_matches request</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.get_players">
+<code class="descname">get_players</code><span class="sig-paren">(</span><em>playerids: list = None</em>, <em>steamids: list = None</em>, <em>usernames: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.get_players" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get multiple players’ info at once.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>A list of playerids, either a <cite>list</cite> of strs or a <cite>list</cite> of ints.
+Max list length is 6.</p>
+</div></blockquote>
+<p><strong>steamids</strong> : list</p>
+<blockquote>
+<div><p>A list of steamids, a <cite>list</cite> of ints, this accepts only <cite>SteamID64</cite> specification, check <a class="reference external" href="https://developer.valvesoftware.com/wiki/SteamID">here</a> for more
+details.
+Max list length is 6</p>
+</div></blockquote>
+<p><strong>usernames</strong> : list</p>
+<blockquote>
+<div><p>A list of usernames, a <cite>list</cite> of strings, case insensitive.
+Max list length is 6</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the API is up and running</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple(createdAt: str, version: str):</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.get_teams">
+<code class="descname">get_teams</code><span class="sig-paren">(</span><em>playerids: list</em>, <em>season: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.get_teams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all teams for a player or group of players in a specified season.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>A list of playerids to fetch teams for, this just fetches teams with these playerids
+in them, it is not an intersection of supplied playerids.</p>
+</div></blockquote>
+<p><strong>season</strong> : int</p>
+<blockquote>
+<div><p>The season for which the teams of these playerids must be fetched</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list(<code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Team</span></code>)</p>
+<blockquote class="last">
+<div><p>A list of Team objects representing each team from the request.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.match_by_id">
+<code class="descname">match_by_id</code><span class="sig-paren">(</span><em>match_id</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.match_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a Match by its ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>match_id</strong> : int or str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Match</span></code></a></p>
+<blockquote class="last">
+<div><p>A match object representing the requested match.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.player_by_id">
+<code class="descname">player_by_id</code><span class="sig-paren">(</span><em>player_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.player_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a player’s info by their ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>player_id</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+<blockquote class="last">
+<div><p>A Player object representing the requested player.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.client.Client.player_by_name">
+<code class="descname">player_by_name</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.client.Client.player_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a player’s info by their ingame name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>username</strong> : str</p>
+<blockquote>
+<div><p>Case insensitive username</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+<blockquote class="last">
+<div><p>A Player object representing the requested player.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pybattlerite.asyncclient">
+<span id="pybattlerite-asyncclient"></span><h2>pybattlerite.AsyncClient<a class="headerlink" href="#module-pybattlerite.asyncclient" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybattlerite.asyncclient.AsyncClient">
+<em class="property">class </em><code class="descclassname">pybattlerite.asyncclient.</code><code class="descname">AsyncClient</code><span class="sig-paren">(</span><em>key</em>, <em>session: aiohttp.client.ClientSession = None</em>, <em>lang: str = 'English'</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pybattlerite.clientbase.ClientBase</span></code></p>
+<p>Top level class for user to interact with the API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>The official Battlerite API key.</p>
+</div></blockquote>
+<p><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<p><strong>lang</strong> : str, Default[‘English’]</p>
+<blockquote class="last">
+<div><p>The language to localise game specific strings in.</p>
+<p>Currently available languages are:</p>
+<p><cite>Brazilian, English, French, German, Italian, Japanese, Korean,
+Polish, Romanian, Russian, SChinese, Spanish, Turkish.</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.get_matches">
+<code class="descname">get_matches</code><span class="sig-paren">(</span><em>offset: int = None</em>, <em>limit: int = None</em>, <em>after=None</em>, <em>before=None</em>, <em>playerids: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.get_matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the /matches endpoint and grab a list of matches</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>offset</strong> : Optional[int]</p>
+<blockquote>
+<div><p>The nth number of match to start the page from.</p>
+</div></blockquote>
+<p><strong>limit</strong> : Optional[int]</p>
+<blockquote>
+<div><p>Number of matches to return.</p>
+</div></blockquote>
+<p><strong>after</strong> : Optional[str or <a class="reference external" href="https://docs.python.org/3.6/library/datetime.html#datetime-objects">datetime.datetime</a>]</p>
+<blockquote>
+<div><p>Filter to return matches after provided time period, if an str is provided it should follow the <strong>iso8601</strong> format.</p>
+</div></blockquote>
+<p><strong>before</strong> :  Optional[str or <a class="reference external" href="https://docs.python.org/3.6/library/datetime.html#datetime-objects">datetime.datetime</a>]</p>
+<blockquote>
+<div><p>Filter to return matches before provided time period, if an str is provided it should follow the <strong>iso8601</strong> format.</p>
+</div></blockquote>
+<p><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>Filter to only return matches with provided players in them by looking for their player IDs.</p>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p><strong>——-</strong></p>
+<p><strong>:class:`pybattlerite.models.AsyncMatchPaginator`</strong></p>
+<blockquote class="last">
+<div><p>A MatchPaginator instance representing a get_matches request</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.get_players">
+<code class="descname">get_players</code><span class="sig-paren">(</span><em>playerids: list = None</em>, <em>steamids: list = None</em>, <em>usernames: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.get_players" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get multiple players’ info at once.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>A list of playerids, either a <cite>list</cite> of strs or a <cite>list</cite> of ints.
+Max list length is 6.</p>
+</div></blockquote>
+<p><strong>steamids</strong> : list</p>
+<blockquote>
+<div><p>A list of steamids, a <cite>list</cite> of ints, this accepts only <cite>SteamID64</cite> specification, check <a class="reference external" href="https://developer.valvesoftware.com/wiki/SteamID">here</a> for more
+details.
+Max list length is 6</p>
+</div></blockquote>
+<p><strong>usernames</strong> : list</p>
+<blockquote>
+<div><p>A list of usernames, a <cite>list</cite> of strings, case insensitive.
+Max list length is 6</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the API is up and running</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple(createdAt: str, version: str):</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.get_teams">
+<code class="descname">get_teams</code><span class="sig-paren">(</span><em>playerids: list</em>, <em>season: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.get_teams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all teams for a player or group of players in a specified season.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>playerids</strong> : list</p>
+<blockquote>
+<div><p>A list of playerids to fetch teams for, this just fetches teams with these playerids
+in them, it is not an intersection of supplied playerids.</p>
+</div></blockquote>
+<p><strong>season</strong> : int</p>
+<blockquote>
+<div><p>The season for which the teams of these playerids must be fetched</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list(<code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Team</span></code>)</p>
+<blockquote class="last">
+<div><p>A list of Team objects representing each team from the request.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.match_by_id">
+<code class="descname">match_by_id</code><span class="sig-paren">(</span><em>match_id</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.match_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a Match by its ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>match_id</strong> : int or str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.AsyncMatch" title="pybattlerite.models.AsyncMatch"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.AsyncMatch</span></code></a></p>
+<blockquote class="last">
+<div><p>A match object representing the requested match.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.player_by_id">
+<code class="descname">player_by_id</code><span class="sig-paren">(</span><em>player_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.player_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a player’s info by their ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>player_id</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+<blockquote class="last">
+<div><p>A Player object representing the requested player.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.asyncclient.AsyncClient.player_by_name">
+<code class="descname">player_by_name</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.asyncclient.AsyncClient.player_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a player’s info by their ingame name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>username</strong> : str</p>
+<blockquote>
+<div><p>Case insensitive username</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Player</span></code></a></p>
+<blockquote class="last">
+<div><p>A Player object representing the requested player.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pybattlerite.models">
+<span id="pybattlerite-models"></span><h2>pybattlerite.models<a class="headerlink" href="#module-pybattlerite.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybattlerite.models.AsyncMatch">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">AsyncMatch</code><span class="sig-paren">(</span><em>data</em>, <em>session</em>, <em>included=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.MatchBase" title="pybattlerite.models.MatchBase"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.MatchBase</span></code></a></p>
+<p>Extends <a class="reference internal" href="#pybattlerite.models.MatchBase" title="pybattlerite.models.MatchBase"><code class="xref py py-class docutils literal"><span class="pre">MatchBase</span></code></a> to add async <a class="reference internal" href="#pybattlerite.models.AsyncMatch.get_telemetry" title="pybattlerite.models.AsyncMatch.get_telemetry"><code class="xref py py-meth docutils literal"><span class="pre">get_telemetry()</span></code></a>.</p>
+<dl class="method">
+<dt id="pybattlerite.models.AsyncMatch.get_telemetry">
+<code class="descname">get_telemetry</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatch.get_telemetry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get telemetry data for a match.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<blockquote>
+<div><p>Optional session to use to request telemetry data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>dict</cite></p>
+<blockquote class="last">
+<div><p>Match telemetry data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.AsyncMatchPaginator">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">AsyncMatchPaginator</code><span class="sig-paren">(</span><em>matches</em>, <em>data</em>, <em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatchPaginator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.Paginator" title="pybattlerite.models.Paginator"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Paginator</span></code></a></p>
+<p>Returned only by the <em>get_matches</em> method of the async client.</p>
+<dl class="method">
+<dt id="pybattlerite.models.AsyncMatchPaginator.first">
+<code class="descname">first</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatchPaginator.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the first page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.models.AsyncMatchPaginator.next">
+<code class="descname">next</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatchPaginator.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote>
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>BRPaginationError</strong></p>
+<blockquote class="last">
+<div><p>The current page is the last page of results</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.models.AsyncMatchPaginator.prev">
+<code class="descname">prev</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.AsyncMatchPaginator.prev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the previous page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote>
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>BRPaginationError</strong></p>
+<blockquote class="last">
+<div><p>The current page is the first page of results</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.BaseBRObject">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">BaseBRObject</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.BaseBRObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A base object for most data classes</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Match">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Match</code><span class="sig-paren">(</span><em>data</em>, <em>session</em>, <em>included=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.MatchBase" title="pybattlerite.models.MatchBase"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.MatchBase</span></code></a></p>
+<p>Extends <a class="reference internal" href="#pybattlerite.models.MatchBase" title="pybattlerite.models.MatchBase"><code class="xref py py-class docutils literal"><span class="pre">MatchBase</span></code></a> to add <a class="reference internal" href="#pybattlerite.models.Match.get_telemetry" title="pybattlerite.models.Match.get_telemetry"><code class="xref py py-meth docutils literal"><span class="pre">get_telemetry()</span></code></a></p>
+<dl class="method">
+<dt id="pybattlerite.models.Match.get_telemetry">
+<code class="descname">get_telemetry</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Match.get_telemetry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get telemetry data for a match.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="http://docs.python-requests.org/en/master/api/#request-sessions">requests.Session</a>]</p>
+<blockquote>
+<div><p>Optional session to use to request telemetry data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>dict</cite></p>
+<blockquote class="last">
+<div><p>Match telemetry data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.MatchBase">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">MatchBase</code><span class="sig-paren">(</span><em>data</em>, <em>session</em>, <em>included=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.MatchBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.BaseBRObject" title="pybattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.BaseBRObject</span></code></a></p>
+<p>A class that holds data for a match.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+<tr class="row-even"><td><strong>created_at</strong></td>
+<td>(<a class="reference external" href="https://docs.python.org/3.6/library/datetime.html#datetime-objects">datetime.datetime</a>) Time when the match was created.</td>
+</tr>
+<tr class="row-odd"><td><strong>duration</strong></td>
+<td>(int) The match’s duration in seconds.</td>
+</tr>
+<tr class="row-even"><td><strong>game_mode</strong></td>
+<td>(str) The gamemode this match was of.</td>
+</tr>
+<tr class="row-odd"><td><strong>patch</strong></td>
+<td>(str) The Battlerite patch version this match was played on.</td>
+</tr>
+<tr class="row-even"><td><strong>shard_id</strong></td>
+<td>(str) The shard on which this match data resides, only <cite>global</cite> is available at the moment.</td>
+</tr>
+<tr class="row-odd"><td><strong>map_id</strong></td>
+<td>(int) The match’s map’s ID.</td>
+</tr>
+<tr class="row-even"><td><strong>type</strong></td>
+<td>(str) The match type, ex: <a href="#id10"><span class="problematic" id="id11">`</span></a>QUICK2V2 <a href="#id12"><span class="problematic" id="id13">`</span></a>.</td>
+</tr>
+<tr class="row-odd"><td><strong>rosters</strong></td>
+<td>(list) A list of <a class="reference internal" href="#pybattlerite.models.Roster" title="pybattlerite.models.Roster"><code class="xref py py-class docutils literal"><span class="pre">Roster</span></code></a> objects representing rosters taking part in the match.</td>
+</tr>
+<tr class="row-even"><td><strong>rounds</strong></td>
+<td>(list) A list of <a class="reference internal" href="#pybattlerite.models.Round" title="pybattlerite.models.Round"><code class="xref py py-class docutils literal"><span class="pre">Round</span></code></a> objects representing each round in the match.</td>
+</tr>
+<tr class="row-odd"><td><strong>spectators</strong></td>
+<td>(list) A list of <a class="reference internal" href="#pybattlerite.models.Participant" title="pybattlerite.models.Participant"><code class="xref py py-class docutils literal"><span class="pre">Participant</span></code></a> objects representing spectators, this seems unimplemented in the game as of now.</td>
+</tr>
+<tr class="row-even"><td><strong>telemetry_url</strong></td>
+<td>(str) URL for the telemetry file for this match</td>
+</tr>
+<tr class="row-odd"><td><strong>session</strong></td>
+<td>(Optional[<a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session">aiohttp.ClientSession</a>]) Optional session to use to request match data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.MatchPaginator">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">MatchPaginator</code><span class="sig-paren">(</span><em>matches</em>, <em>data</em>, <em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.MatchPaginator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.Paginator" title="pybattlerite.models.Paginator"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.Paginator</span></code></a></p>
+<p>Returned only by the <em>get_matches</em> method of the client.</p>
+<dl class="method">
+<dt id="pybattlerite.models.MatchPaginator.first">
+<code class="descname">first</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.MatchPaginator.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the first page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="http://docs.python-requests.org/en/master/api/#request-sessions">requests.Session</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.models.MatchPaginator.next">
+<code class="descname">next</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.MatchPaginator.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="http://docs.python-requests.org/en/master/api/#request-sessions">requests.Session</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote>
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>BRPaginationError</strong></p>
+<blockquote class="last">
+<div><p>The current page is the last page of results</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybattlerite.models.MatchPaginator.prev">
+<code class="descname">prev</code><span class="sig-paren">(</span><em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.MatchPaginator.prev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the previous page of matches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>session</strong> : Optional[<a class="reference external" href="http://docs.python-requests.org/en/master/api/#request-sessions">requests.Session</a>]</p>
+<blockquote>
+<div><p>Optional session to use to make this request.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>list</cite></p>
+<blockquote>
+<div><p>A list of <a class="reference internal" href="#pybattlerite.models.Match" title="pybattlerite.models.Match"><code class="xref py py-class docutils literal"><span class="pre">Match</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>BRPaginationError</strong></p>
+<blockquote class="last">
+<div><p>The current page is the first page of results</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Paginator">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Paginator</code><span class="sig-paren">(</span><em>matches</em>, <em>data</em>, <em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Paginator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Returned only by BRClient.get_matches</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Participant">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Participant</code><span class="sig-paren">(</span><em>participant</em>, <em>included</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Participant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.BaseBRObject" title="pybattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.BaseBRObject</span></code></a></p>
+<p>A class that holds data about a participant in a match.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+<tr class="row-even"><td><strong>actor</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-odd"><td><strong>shard_id</strong></td>
+<td>(str)</td>
+</tr>
+<tr class="row-even"><td><strong>attachment</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-odd"><td><strong>emote</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-even"><td><strong>mount</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-odd"><td><strong>outfit</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-even"><td><strong>side</strong></td>
+<td>(int)</td>
+</tr>
+<tr class="row-odd"><td><strong>ability_uses</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>damage_done</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>damage_received</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>deaths</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>disables_done</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>disables_received</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>energy_gained</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>energy_used</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>healing_done</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>healing_received</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>kills</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>score</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>time_alive</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-even"><td><strong>user_id</strong></td>
+<td>(Optional[int])</td>
+</tr>
+<tr class="row-odd"><td><strong>player</strong></td>
+<td>(Optional[<a class="reference internal" href="#pybattlerite.models.Player" title="pybattlerite.models.Player"><code class="xref py py-class docutils literal"><span class="pre">Player</span></code></a>])</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Player">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Player</code><span class="sig-paren">(</span><em>data</em>, <em>lang: str = 'English'</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.BaseBRObject" title="pybattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.BaseBRObject</span></code></a></p>
+<p>A class that holds general user data, if this is through a Match, this will not have
+name, picture and title, only an ID</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+<tr class="row-even"><td><strong>name</strong></td>
+<td>(str) The player’s name</td>
+</tr>
+<tr class="row-odd"><td><strong>picture</strong></td>
+<td>(int) The picture ID for this player</td>
+</tr>
+<tr class="row-even"><td><strong>title</strong></td>
+<td>(int) This player’s ingame title</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Roster">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Roster</code><span class="sig-paren">(</span><em>roster</em>, <em>included</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Roster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.BaseBRObject" title="pybattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.BaseBRObject</span></code></a></p>
+<p>A class that holds data about one of the two teams in a match.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+<tr class="row-even"><td><strong>shard_id</strong></td>
+<td>(str) The shard on which this roster data resides, only <cite>global</cite> is available at the moment.</td>
+</tr>
+<tr class="row-odd"><td><strong>score</strong></td>
+<td>(int) The roster’s overall score for a match.</td>
+</tr>
+<tr class="row-even"><td><strong>won</strong></td>
+<td>(bool) Signifies if the roster won a match.</td>
+</tr>
+<tr class="row-odd"><td><strong>participants</strong></td>
+<td>(list) A list of <a class="reference internal" href="#pybattlerite.models.Participant" title="pybattlerite.models.Participant"><code class="xref py py-class docutils literal"><span class="pre">Participant</span></code></a> representing players that are part of the roster.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybattlerite.models.Round">
+<em class="property">class </em><code class="descclassname">pybattlerite.models.</code><code class="descname">Round</code><span class="sig-paren">(</span><em>_round</em>, <em>included</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.models.Round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.models.BaseBRObject" title="pybattlerite.models.BaseBRObject"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.models.BaseBRObject</span></code></a></p>
+<p>A class that holds general data about a round.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>id</strong></td>
+<td>(int) A general unique ID for each type of data.</td>
+</tr>
+<tr class="row-even"><td><strong>duration</strong></td>
+<td>(int) Duration in seconds of this round.</td>
+</tr>
+<tr class="row-odd"><td><strong>ordinal</strong></td>
+<td>(int) The round number this round was in a match.</td>
+</tr>
+<tr class="row-even"><td><strong>winning_team</strong></td>
+<td>(int) Signifies which of the teams/rosters won the round.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pybattlerite.utils">
+<span id="pybattlerite-utils"></span><h2>pybattlerite.utils<a class="headerlink" href="#module-pybattlerite.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybattlerite.utils.Localizer">
+<em class="property">class </em><code class="descclassname">pybattlerite.utils.</code><code class="descname">Localizer</code><span class="sig-paren">(</span><em>lang</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.utils.Localizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Use this to manually localize any data with an available <cite>loc_id</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str</p>
+<blockquote class="last">
+<div><p>The language to localise game specific strings in.</p>
+<p>Currently available languages are:</p>
+<p><cite>Brazilian, English, French, German, Italian, Japanese, Korean,
+Polish, Romanian, Russian, SChinese, Spanish, Turkish.</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybattlerite.utils.Localizer.localize">
+<code class="descname">localize</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.utils.Localizer.localize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call to return a localized string for your id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_id</strong> : str</p>
+<blockquote>
+<div><p>An id that refers to the name of an object in multiple languages.</p>
+<p>Example: ‘035ad4c27697469e8163040ae0a4f796’</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
+<blockquote class="last">
+<div><p>A localized string in the <a class="reference internal" href="#pybattlerite.utils.Localizer" title="pybattlerite.utils.Localizer"><code class="xref py py-class docutils literal"><span class="pre">Localizer</span></code></a>’s set language.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pybattlerite.errors">
+<span id="pybattlerite-errors"></span><h2>pybattlerite.errors<a class="headerlink" href="#module-pybattlerite.errors" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="pybattlerite.errors.BRFilterException">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">BRFilterException</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.BRFilterException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Raised when an invalid filter value is supplied.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pybattlerite.errors.BRPaginationError">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">BRPaginationError</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.BRPaginationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Raised when <code class="xref py py-meth docutils literal"><span class="pre">asyncbattlerite.models.MatchPaginator.next()</span></code> or <code class="xref py py-meth docutils literal"><span class="pre">asyncbattlerite.models.MatchPaginator.prev()</span></code>
+are called when the paginator is on the last or first page respectively.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pybattlerite.errors.BRRequestException">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">BRRequestException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.BRRequestException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>General purpose exception, base class for other request related exceptions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>response</strong> : <a class="reference external" href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#aiohttp.ClientResponse">aiohttp.ClientResponse</a></p>
+<p><strong>data</strong> : dict</p>
+<blockquote class="last">
+<div><p>The json response from the API</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pybattlerite.errors.BRServerException">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">BRServerException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.BRServerException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.errors.BRRequestException" title="pybattlerite.errors.BRRequestException"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.errors.BRRequestException</span></code></a></p>
+<p>Exception that signifies that the server failed to respond with valid data.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pybattlerite.errors.EmptyResponseException">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">EmptyResponseException</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.EmptyResponseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Raised when any request is 200 OK, but the data is empty.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pybattlerite.errors.NotFoundException">
+<em class="property">exception </em><code class="descclassname">pybattlerite.errors.</code><code class="descname">NotFoundException</code><span class="sig-paren">(</span><em>response</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pybattlerite.errors.NotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pybattlerite.errors.BRRequestException" title="pybattlerite.errors.BRRequestException"><code class="xref py py-class docutils literal"><span class="pre">pybattlerite.errors.BRRequestException</span></code></a></p>
+<p>For the 404s</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PyBattlerite 0.5.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, PyBattlerite.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
