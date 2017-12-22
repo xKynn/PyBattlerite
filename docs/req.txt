@@ -1,0 +1,4 @@
+pybattlerite
+aiohttp
+requests
+sphinx_autodoc_typehints
