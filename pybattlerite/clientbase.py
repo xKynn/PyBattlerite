@@ -7,6 +7,8 @@ class ClientBase:
     avl_langs = ['Brazilian', 'English', 'French', 'German', 'Italian',
                  'Japanese', 'Korean', 'Polish', 'Romanian', 'Russian',
                  'SChinese', 'Spanish', 'Turkish']
+    server_types = ['QUICK2V2', 'QUICK3V3', 'PRIVATE']
+    ranking_types = ['RANKED', 'UNRANKED', 'NONE']
 
     @staticmethod
     def _isocheck(time):
@@ -19,15 +21,15 @@ class ClientBase:
         except ValueError:
             return False
 
-    def prepare_match_params(self, offset, limit, after, before, playerids):
-        if all((after, before)):
-            if all((isinstance(after, datetime.datetime), isinstance(before, datetime.datetime))):
+    def prepare_match_params(self, offset, limit, after, before, playerids, server_type, ranking_type, patch_version):
+        if after and before:
+            if isinstance(after, datetime.datetime) and isinstance(before, datetime.datetime):
                 if before <= after:
                     raise BRFilterException("'after' must occur at a time before 'before'")
                 else:
                     after = after.strftime("%Y-%m-%dT%H:%M:%SZ")
                     before = before.strftime("%Y-%m-%dT%H:%M:%SZ")
-            elif all((isinstance(after, str), isinstance(before, str))):
+            elif isinstance(after, str) and isinstance(before, str):
                 if not all(map(self._isocheck, (after, before))):
                     raise BRFilterException("'after' or 'before', if instances of 'str', should follow the "
                                             "'iso8601' format '%Y-%m-%dT%H:%M:%SZ'")
@@ -51,14 +53,16 @@ class ClientBase:
                 elif not self._isocheck(before):
                     raise BRFilterException("'before', if instance of 'str', should follow the 'iso8601' format "
                                             "'%Y-%m-%dT%H:%M:%SZ'")
-        # # Make sure 'playernames' is a list of 'str's
-        # if playernames:
-        #     if not all([isinstance(player, str) for player in playernames]):
-        #         raise BRFilterException("'playernames' must be a list of 'str's")
-        # # Make sure 'teamnames' is a list of 'str's
-        # if teamnames:
-        #     if not all([isinstance(team, str) for team in teamnames]):
-        #         raise BRFilterException("'teamnames' must be a list of 'str's")
+
+        if limit and limit not in range(1, 6):
+            raise BRFilterException("'limit' can only range from 1-5")
+        if server_type and all(map(lambda d: isinstance(d, str), server_type))\
+                and all(map(lambda d: d.upper() in self.server_types, server_type)):
+            raise BRFilterException("'server_type' can only have 'QUICK2V2', 'QUICK3V3' or 'PRIVATE'")
+        if ranking_type and all(map(lambda d: isinstance(d, str), ranking_type))\
+                and all(map(lambda d: d.upper() in self.ranking_types, ranking_type)):
+            raise BRFilterException("'ranking_type' can only have 'RANKED', 'UNRANKED' or 'NONE'")
+
         params = {}
         if offset:
             params['page[offset]'] = offset
@@ -68,12 +72,14 @@ class ClientBase:
             params['filter[createdAt-start]'] = after
         if before:
             params['filter[createdAt-end]'] = before
-        # if playernames:
-        #     params['filter[playerNames]'] = ','.join(playernames)
+        if server_type:
+            params['filter[serverType]'] = ','.join([svt.upper() for svt in server_type])
         if playerids:
             params['filter[playerIds]'] = ','.join([str(_id) for _id in playerids])
-        # if teamnames:
-        #     params['filter[teamNames]'] = ','.join(teamnames)
+        if ranking_type:
+            params['filter[rankingType]'] = ','.join([rkt.upper() for rkt in ranking_type])
+        if patch_version:
+            params['filter[patchVersion]'] = ','.join([str(ver) for ver in patch_version])
 
         return params
 
@@ -114,8 +120,8 @@ class ClientBase:
         if not all((playerids, season)):
             raise BRFilterException("Both the filters, 'playerids' and 'season' are required.")
         params = {
-            'tag[season]': season,
-            'tag[playerIds]': ','.join([str(_id) for _id in playerids])
+            'filter[season]': season,
+            'filter[playerIds]': ','.join([str(_id) for _id in playerids])
         }
 
         return params

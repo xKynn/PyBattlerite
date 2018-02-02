@@ -85,7 +85,8 @@ class AsyncClient(ClientBase):
         data = await self.gen_req("{0}matches/{1}".format(self.base_url, match_id))
         return AsyncMatch(data, self.session)
 
-    async def get_matches(self, offset: int=None, limit: int=None, after=None, before=None, playerids: list=None):
+    async def get_matches(self, offset: int=None, limit: int=None, after=None, before=None, playerids: list=None,
+                          server_type: list=None, ranking_type: list=None, patch_version: list=None):
         """
         Access the /matches endpoint and grab a list of matches
 
@@ -101,17 +102,25 @@ class AsyncClient(ClientBase):
             Filter to return matches after provided time period, if an str is provided it should follow the **iso8601** format.
         before :  Optional[str or datetime.datetime_]
             Filter to return matches before provided time period, if an str is provided it should follow the **iso8601** format.
-        playerids : list
+        playerids : Optional[list]
             Filter to only return matches with provided players in them by looking for their player IDs.
+        server_type : Optional[list(str)]
+            The match's server_type, can be either 'QUICK2V2', 'QUICK3V3' or 'PRIVATE'.
+        ranking_type : Optional[list(str)]
+            The match's rank type, either 'RANKED', 'UNRANKED' or 'NONE'.
+        patch_version : Optional[list(str)]
+            The Battlerite patch versions you want data for, this doesn't go through any tests so check your versions.
+
         Returns
         -------
         :class:`pybattlerite.models.AsyncMatchPaginator`
             A MatchPaginator instance representing a get_matches request
         """
+
         # Check compatibility 'after' and 'before' with iso8601
         # Also checks if after isn't greater than before
-
-        params = self.prepare_match_params(offset, limit, after, before, playerids)
+        params = self.prepare_match_params(offset, limit, after, before, playerids, server_type, ranking_type,
+                                           patch_version)
 
         data = await self.gen_req("{}matches".format(self.base_url), params=params)
         matches = []
